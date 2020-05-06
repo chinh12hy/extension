@@ -52,6 +52,12 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
     top: 3px;
     z-index: 99;
 }
+
+.qcuidfb_btn_group {
+    position: absolute;
+    top: 42px;
+    right: 15px;
+}
 .data_result{
     user-select: text;
     line-height: 16px !important;
