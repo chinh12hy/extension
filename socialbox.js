@@ -70,6 +70,22 @@
         } catch (ex7) {};
 
         function handleCreateModuleExtension() {
+            // _3u1 _gli _6pe1 _87m1 là class nhận biết trong group
+            // Xử lý thêm button trong phần group
+            if (document.getElementById('BrowseResultsContainer')) {
+                let listGroup = document['getElementsByClassName']('_3u1 _gli _6pe1 _87m1');
+                try {
+                    for (let index = 0; index < listGroup['length']; index++) {
+                        let group = listGroup[index];
+                        if (group.childNodes.length === 1) {
+                            let id = JSON.parse(group.getAttribute('data-bt')).id;
+                            let divContainer = createDevContainer(id);
+                            divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_group';
+                            group.appendChild(divContainer)
+                        }
+                    }
+                } catch (ex1) {}
+            };
             // xử lý trong phần comment FB
             if (document['getElementsByClassName']('commentable_item')['length'] > 0) {
                 let commentsTable = document['getElementsByClassName']('commentable_item');
@@ -81,8 +97,12 @@
                                 let linkItem = link[index];
                                 // Tìm ra thằng nào có chứa id trong attrs
                                 if (linkItem['getAttribute']('data-hovercard') && !linkItem['getAttribute']('aria-hidden')) {
+                                    // LinkItem đến bước này vẫn lấy chính xác
                                     let regex = /\?id=(\d+)/;
-                                    let id = regex['exec'](linkItem)[1];
+                                    let dataHovercard = linkItem.getAttribute('data-hovercard');
+                                    // sau khi regex thì sẽ có sai sót làm thiếu linkItem ở đây
+                                    let id = regex['exec'](dataHovercard)[1];
+
                                     let button = createDevContainer(id);
                                     // Lúc đầu có 3 thăng child thì khi thêm cái dev của mình sẽ lên 4 và từ vòng lặp sau sẽ không cần thêm dev của mình nữa.
                                     if (linkItem.parentNode.childNodes.length === 3) {
@@ -96,16 +116,19 @@
                 } catch (ex1) {}
             };
 
+            // dùng cho các card hiển thị trong bảng tin FB
             if (document['getElementsByClassName']('userContentWrapper')['length'] > 0) {
                 let container = document['getElementsByClassName']('userContentWrapper');
                 try {
                     for (let index = 0; index < container['length']; index++) {
                         let item = container[index];
+                        // Nếu chưa có button nào thì mới tiến hành tạo button
                         if (item['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
                             let tagA = item['getElementsByTagName']('a');
                             for (let index = 0; index < tagA['length']; index++) {
                                 let itemHasID = tagA[index]['getAttribute']('data-hovercard') + '';
-                                if (itemHasID['indexOf']('user.php') > -1) {
+                                // nếu là bài viết của 1 người dùng
+                                if (itemHasID['indexOf']('user.php') > -1 ) {
                                     let regex = /hovercard\/user\.php\?id=(\d+)/;
                                     let id = regex['exec'](itemHasID)[1];
                                     let divContainer = createDevContainer(id);
@@ -113,6 +136,17 @@
                                         divContainer['setAttribute']('data-fbtype', 'post');
                                         divContainer['setAttribute']('data-fbname', tagA[index]['getAttribute']('title'))
                                     } catch (ex) {};
+                                    try {
+                                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userContentWrapper';
+                                        item['appendChild'](divContainer)
+                                    } catch (ex) {};
+                                    break
+                                }
+                                // nếu là sản phẩm của 1 page đăng lên
+                                if (itemHasID['indexOf']('page.php') > -1 ) {
+                                    let regex = /hovercard\/page\.php\?id=(\d+)/;
+                                    let idPage = regex['exec'](itemHasID)[1];
+                                    let divContainer = createDevContainer(idPage);
                                     try {
                                         divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userContentWrapper';
                                         item['appendChild'](divContainer)
