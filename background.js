@@ -2,12 +2,13 @@
 function checkHost(url) {
     let currentUrl = new URL(url)['host'];
     let isFacebook = currentUrl['indexOf']('facebook.com') > -1;
-    // let isYoutube = currentUrl['indexOf']('youtube.com') > -1;
-    if (isFacebook || currentUrl['indexOf']('pages.fm') > -1) {
+    let isYoutube = currentUrl['indexOf']('youtube.com') > -1;
+    if (isFacebook || isYoutube || currentUrl['indexOf']('pages.fm') > -1) {
         return true
     };
     return false
 }
+
 function getCookies(domain, name)
 {
     // Lấy cookies
@@ -33,6 +34,7 @@ chrome['tabs']['onUpdated']['addListener'](function(tabID, response) {
         chrome['tabs']['get'](tabID, function(resp) {
             if (checkHost(resp['url'])) {
                 // Lấy token
+                console.log('resp: ', resp);
                 getCookies("http://sbox.staging/", "sbtoken");
                 // Sử dụng file socialbox.js để tạo thêm các button trong tab google
                 chrome['tabs']['executeScript'](tabID, {
@@ -43,6 +45,7 @@ chrome['tabs']['onUpdated']['addListener'](function(tabID, response) {
                     file: 'socialbox.css'
                 })
             }
+
         })
     }
 });

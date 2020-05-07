@@ -1,7 +1,7 @@
 {
   "name": "Social box",
-  "description": "Social box1",
-  "version": "0.0.5",
+  "description": "Tiện ích của social box",
+  "version": "0.0.7",
   "permissions": [
     "cookies",
     "tabs",
