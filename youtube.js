@@ -1,30 +1,6 @@
+
 (function(e) {
     function createHtml() {
-        function convertIDUserYoutube(userEndpoint) {
-            let userID = userEndpoint.split('/user/')[1];
-            let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (this.readyState === 4 && this.status === 200) {
-                }
-            };
-
-            xhr.addEventListener("load", (response) => {
-                // Khi hết quyền truy cập vì k có token hoặc hết hạn thì tiến hành hiển thị ra thông báo lỗi
-                // if (response.target.status === 401) {
-                //     createButtonLogin();
-                // }
-                // Xử lý khi gọi API thành công
-                if (response.target.status === 200) {
-                    // Lấy ra id và tiếp tục sử dụng
-                    // createIconSuccess();
-                }
-            });
-            // console.log(new FormData())
-            xhr['open']('POST', 'https://socialnewsify.com/wp-admin/admin-ajax.php');
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr['send'](`action=getChannelID&username=${userID}`);
-        }
-        // Lấy danh sách các button
         let listButton = document['getElementsByClassName']('qcuidfb_btn_search');
         for (let index = 0; index < listButton['length']; index++) {
             listButton[index]['outerHTML'] = ''
@@ -146,15 +122,6 @@
                                     itemResult.style = "position: relative";
                                     divContainer['className'] = 'qcuidfb_btn_search yt-channel-owner';
                                     itemResult.appendChild(divContainer);
-                                } else if (idChanel.includes('user')) {
-                                    // idChannel ở đây có định dạng /user/ nên phải convert lại
-                                    convertIDUserYoutube(idChanel);
-                                    // getJson('https://quangcaouidfb.com/Api/GetQcToken', function(_0xa538x7) {
-                                    //     chrome['tabs']['executeScript'](_0xa538x4, {
-                                    //         code: 'localStorage.qcuidtk=\'' + _0xa538x7['token'] + '\';'
-                                    //     }, function() {})
-                                    // });
-                                    return
                                 }
                             }
                         }
@@ -193,213 +160,6 @@
 
             // END youtube
             // TODO YOUTUBE ---------------------------------------------------------------------------------------------------------------
-
-            // _3u1 _gli _6pe1 _87m1 là class nhận biết trong group
-            // Xử lý thêm button trong phần group
-            if (document.getElementById('BrowseResultsContainer')) {
-                let listGroup = document['getElementsByClassName']('_3u1 _gli _6pe1 _87m1');
-                try {
-                    for (let index = 0; index < listGroup['length']; index++) {
-                        let group = listGroup[index];
-                        if (group.childNodes.length === 1) {
-                            let id = JSON.parse(group.getAttribute('data-bt')).id;
-                            let divContainer = createDevContainer(id);
-                            divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_group';
-                            group.appendChild(divContainer)
-                        }
-                    }
-                } catch (ex1) {}
-            };
-            // xử lý trong phần comment FB
-            if (document['getElementsByClassName']('commentable_item')['length'] > 0) {
-                let commentsTable = document['getElementsByClassName']('commentable_item');
-                try {
-                    for (let index = 0; index < commentsTable['length']; index++) {
-                        let link = commentsTable[index]['getElementsByTagName']('a');
-                        for ( let index = 0; index < link['length']; index++ ) {
-                            try {
-                                let linkItem = link[index];
-                                // Tìm ra thằng nào có chứa id trong attrs
-                                if (linkItem['getAttribute']('data-hovercard') && !linkItem['getAttribute']('aria-hidden')) {
-                                    // LinkItem đến bước này vẫn lấy chính xác
-                                    let regex = /\?id=(\d+)/;
-                                    let dataHovercard = linkItem.getAttribute('data-hovercard');
-                                    // sau khi regex thì sẽ có sai sót làm thiếu linkItem ở đây
-                                    let id = regex['exec'](dataHovercard)[1];
-
-                                    //  linkItem.parentNode.childNodes.length === 3
-                                    // Kiểm tra xem thăng cha nó có button chưa nếu chưa có thì mới tiến hành tạo tránh tạo spam html
-                                    if (linkItem['parentNode']['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                                        let button = createDevContainer(id);
-
-                                        button['className'] = 'qcuidfb_btn_search qcuidfb_btn_userCommentInner';
-                                        linkItem['parentNode'].append(button);
-                                    }
-                                }
-                            } catch (ex3) {}
-                        };
-                    };
-                } catch (ex1) {}
-            };
-
-            // dùng cho các card hiển thị trong bảng tin FB
-            if (document['getElementsByClassName']('userContentWrapper')['length'] > 0) {
-                let container = document['getElementsByClassName']('userContentWrapper');
-                try {
-                    for (let index = 0; index < container['length']; index++) {
-                        let item = container[index];
-                        // Nếu chưa có button nào thì mới tiến hành tạo button
-                        if (item['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0 || item.childNodes.length === 2) {
-                            let tagA = item['getElementsByTagName']('a');
-                            for (let index = 0; index < tagA['length']; index++) {
-                                let itemHasID = tagA[index]['getAttribute']('data-hovercard') + '';
-                                // nếu là bài viết của 1 người dùng (Vẫn chưa hiển thị trên tất cả user ( được khoảng 80% ))
-                                if (itemHasID['indexOf']('user.php') > -1 ) {
-                                    let regex = /hovercard\/user\.php\?id=(\d+)/;
-                                    let id = regex['exec'](itemHasID)[1];
-                                    let divContainer = createDevContainer(id);
-                                    try {
-                                        divContainer['setAttribute']('data-fbtype', 'post');
-                                        divContainer['setAttribute']('data-fbname', tagA[index]['getAttribute']('title'))
-                                    } catch (ex) {};
-                                    try {
-                                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userContentWrapper';
-                                        item['appendChild'](divContainer)
-                                    } catch (ex) {};
-                                    break
-                                }
-                                // nếu là bài viết của 1 page đăng lên
-                                if (itemHasID['indexOf']('page.php') > -1 ) {
-                                    let regex = /hovercard\/page\.php\?id=(\d+)/;
-                                    let idPage = regex['exec'](itemHasID)[1];
-                                    let divContainer = createDevContainer(idPage);
-                                    try {
-                                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userContentWrapper';
-                                        item['appendChild'](divContainer)
-                                    } catch (ex) {};
-                                    break
-                                }
-                            }
-                        }
-                    }
-                } catch (ex1) {}
-            };
-
-            // Tạo button trong trang chi tiết trang cá nhân FB
-            try {
-                // Tạo button trong trang chi tiết trang cá nhân FB
-                if (document['getElementById']('fbProfileCover') != null && document['getElementById']('pagelet_timeline_profile_actions')['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                    let dataFBUser = document['getElementById']('pagelet_timeline_main_column')['getAttribute']('data-gt');
-                    let userID = JSON['parse'](dataFBUser)['profile_owner'];
-                    let divContainer = createDevContainer(userID);
-                    try {
-                        // comment
-                        divContainer['setAttribute']('data-fbtype', 'profile');
-                        divContainer['setAttribute']('data-fbname', document['getElementById']('fb-timeline-cover-name')['innerText'])
-                    } catch (ex) {};
-                    try {
-                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_profiletimeline';
-                        // Thẻ html bao bọc trong chỗ thông tin cá nhân facebook
-                        let profileInner = document['getElementById']('pagelet_timeline_profile_actions');
-                        profileInner['appendChild'](divContainer)
-                    } catch (ex5) {
-                        createContainerButton(divContainer)
-                    }
-                }
-            } catch (ex3) {};
-
-            // Hiển thị trong phần hover vào mội tên người dùng facebook sẽ hiển thị ra 1 cái popup
-            try {
-                if (document['getElementsByClassName']('hovercardButtonGroup')['length'] > 0) {
-                    let listButtonGroups = document['getElementsByClassName']('hovercardButtonGroup');
-                    try {
-                        for (let index = 0; index < listButtonGroups['length']; index++) {
-                            let buttonGroup = listButtonGroups[index];
-                            if (buttonGroup['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                                let id = buttonGroup['getElementsByClassName']('FriendRequestOutgoing')[0]['getAttribute']('data-profileid') + '';
-                                let divContainer = createDevContainer(id);
-                                try {
-                                    divContainer['setAttribute']('data-fbtype', 'profile')
-                                } catch (ex2) {};
-                                try {
-                                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userHoverCard';
-                                    buttonGroup['appendChild'](divContainer)
-                                } catch (ex) {}
-                            }
-                        }
-                    } catch (ex1) {}
-                } else {
-                    if (document['getElementsByClassName']('HovercardMessagesButton')['length'] > 0) {
-                        let friendButtons = document['getElementsByClassName']('HovercardMessagesButton');
-                        try {
-                            for (let index = 0; index < friendButtons['length']; index++) {
-                                let button = friendButtons[index];
-                                if (button['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                                    let id = button['getAttribute']('ajaxify') + '';
-                                    let regex = /=(\d+)/;
-                                    id = regex['exec'](id)[1];
-                                    let divContainer = createDevContainer(id);
-                                    try {
-                                        divContainer['setAttribute']('data-fbtype', 'profile')
-                                    } catch (ex2) {};
-                                    try {
-                                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userHoverCard';
-                                        button['parentNode']['appendChild'](divContainer)
-                                    } catch (ex) {}
-                                }
-                            }
-                        } catch (ex1) {}
-                    }
-                }
-            } catch (ex3) {};
-
-            // Nếu trong danh sách tìm kiếm facebook
-            try {
-                if (document['getElementsByClassName']('FriendButton')['length'] > 0) {
-                    let friendButtons = document['getElementsByClassName']('FriendButton');
-                    try {
-                        for (let index = 0; index < friendButtons['length']; index++) {
-                            let button = friendButtons[index];
-                            if (button['parentNode']['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                                let id = button['getElementsByClassName']('FriendRequestOutgoing')[0]['getAttribute']('data-profileid') + '';
-                                let divContainer = createDevContainer(id);
-                                try {
-                                    divContainer['setAttribute']('data-fbtype', 'profile')
-                                } catch (ex2) {};
-                                try {
-                                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_likereaction';
-                                    button['appendChild'](divContainer)
-                                } catch (ex) {}
-                            }
-                        }
-                    } catch (ex1) {}
-                }
-            } catch (ex3) {};
-
-            // Nếu trong danh sách tìm kiếm page
-            try {
-                if (document['getElementsByClassName']('PageLikeButton')['length'] > 0) {
-                    let likeButtons = document['getElementsByClassName']('PageLikeButton');
-                    try {
-                        for (let index = 0; index < likeButtons['length']; index++) {
-                            let wrapItem = likeButtons[index];
-                            if (wrapItem['parentNode']['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                                let id = wrapItem['getAttribute']('data-profileid') + '';
-                                let divContainer = createDevContainer(id);
-
-                                try {
-                                    divContainer['setAttribute']('data-fbtype', 'profile')
-                                } catch (ex2) {};
-                                try {
-                                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_likePagereaction';
-                                    wrapItem['parentNode'].style = "position: relative";
-                                    wrapItem['parentNode']['appendChild'](divContainer)
-                                } catch (ex) {}
-                            }
-                        }
-                    } catch (ex1) {}
-                }
-            } catch (ex3) {};
             setTimeout(function() {
                 handleCreateModuleExtension()
             }, 2000)
@@ -516,8 +276,7 @@
         return buttonInner
     }
 
-    if (document['location']['href']['indexOf']('facebook') > -1
-        || document['location']['href']['indexOf']('youtube') > -1) {
+    if (document['location']['href']['indexOf']('youtube') > -1) {
         createHtml()
     };
 })()

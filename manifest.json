@@ -6,7 +6,6 @@
     "cookies",
     "tabs",
     "storage",
-    "*://*.google.com",
     "http://sbox.staging/*",
     "https://sbox.staging/*",
     "activeTab",

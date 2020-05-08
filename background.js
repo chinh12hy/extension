@@ -1,10 +1,8 @@
 // FB url hoặc các link mình cần lấy thông tin
-function checkHost(url) {
+function isFacebook(url) {
     let currentUrl = new URL(url)['host'];
     let isFacebook = currentUrl['indexOf']('facebook.com') > -1;
-    let isYoutube = currentUrl['indexOf']('youtube.com') > -1;
-    let isGoogle = currentUrl['indexOf']('google.com') > -1;
-    if (isFacebook || isYoutube ||  currentUrl['indexOf']('pages.fm') > -1) {
+    if (isFacebook ||  currentUrl['indexOf']('pages.fm') > -1) {
         return true
     };
     return false
@@ -13,6 +11,15 @@ function isGoogle(url) {
     let currentUrl = new URL(url)['host'];
     let isGoogle = currentUrl['indexOf']('google.com') > -1;
     if (isGoogle ||  currentUrl['indexOf']('pages.fm') > -1) {
+        return true
+    };
+    return false
+}
+
+function isYoutube(url) {
+    let currentUrl = new URL(url)['host'];
+    let isYoutube = currentUrl['indexOf']('youtube.com') > -1;
+    if (isYoutube ||  currentUrl['indexOf']('pages.fm') > -1) {
         return true
     };
     return false
@@ -42,12 +49,11 @@ getCookies("http://sbox.staging/", "sbtoken");
 chrome['tabs']['onUpdated']['addListener'](function(tabID, response) {
     if (response['status'] === 'complete') {
         chrome['tabs']['get'](tabID, function(resp) {
-            if (checkHost(resp['url'])) {
-                // Lấy token
+            if (isFacebook(resp['url'])) {
                 getCookies("http://sbox.staging/", "sbtoken");
                 // Sử dụng file socialbox.js để tạo thêm các button trong tab google
                 chrome['tabs']['executeScript'](tabID, {
-                    file: 'socialbox.js'
+                    file: 'facebook.js'
                 }, function() {});
                 // Sử dụng css để thêm style cho button
                 chrome['tabs']['insertCSS'](tabID, {
@@ -57,11 +63,19 @@ chrome['tabs']['onUpdated']['addListener'](function(tabID, response) {
             //isGoogle
             if (isGoogle(resp['url'])) {
                 getCookies("http://sbox.staging/", "sbtoken");
-                // Sử dụng file socialbox.js để tạo thêm các button trong tab google
                 chrome['tabs']['executeScript'](tabID, {
                     file: 'google.js'
                 }, function() {});
-                // Sử dụng css để thêm style cho button
+                chrome['tabs']['insertCSS'](tabID, {
+                    file: 'socialbox.css'
+                })
+            }
+
+            if (isYoutube(resp['url'])) {
+                getCookies("http://sbox.staging/", "sbtoken");
+                chrome['tabs']['executeScript'](tabID, {
+                    file: 'youtube.js'
+                }, function() {});
                 chrome['tabs']['insertCSS'](tabID, {
                     file: 'socialbox.css'
                 })
@@ -70,3 +84,4 @@ chrome['tabs']['onUpdated']['addListener'](function(tabID, response) {
         })
     }
 });
+
