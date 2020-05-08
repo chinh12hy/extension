@@ -58,119 +58,9 @@
         } catch (ex7) {};
 
         function handleCreateModuleExtension() {
-            // TODO YOUTUBE ---------------------------------------------------------------------------------------------------------------
-            // Xử lý ở youtube
-            // Xử lý khi đang xem video
-            if (location.href.includes('https://www.youtube.com/watch')) {
-                try {
-                    if (document.getElementsByClassName('yt-simple-endpoint')) {
-                        let nameChanelYoutube = document.getElementsByClassName('ytd-video-owner-renderer')[3];
-                        let linkTag = nameChanelYoutube.getElementsByTagName('a')[0];
-                        let divWrapExtension = linkTag.parentNode.getElementsByClassName('qcuidfb_btn_search')[0];
-                        // Vì thẻ html mình tạo trong youtube nó không xóa khi đổi router nên ta cứ check xem có cái thẻ ý thì
-                        // xóa đi tạo 1 thẻ mới để lấy chính xác id channel youtube nếu không sẽ chỉ lấy id của 1 channel đâu tiên khi load trang
-                        // TODO cần tìm cách khá hơn để giải quết cái này
-                        if (divWrapExtension) {
-                            linkTag.parentNode.removeChild(divWrapExtension)
-                        }
-                        if (linkTag && nameChanelYoutube['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                            let idChanel = linkTag.getAttribute('href');
-                            let divContainer = createDevContainer(idChanel);
-                            linkTag.parentNode.style = "display: flex; align-items: center;";
-                            divContainer['className'] = 'qcuidfb_btn_search yt-video-owner';
-                            linkTag.parentNode.appendChild(divContainer);
-                        }
-                    };
-                } catch (error) {};
-            }
-
-            // Xử lý khi đang trong home của 1 kênh youtube
-            if (location.href.includes('https://www.youtube.com/channel')) {
-                // Xử lý cho chanel ở đây
-                let nameChannelYoutube = document.getElementById('channel-name');
-                if (nameChannelYoutube['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                    let idChanel = location.href.split('https://www.youtube.com')[1];
-                    let divContainer = createDevContainer(idChanel);
-                    nameChannelYoutube.style = "display: flex; align-items: center;";
-                    divContainer['className'] = 'qcuidfb_btn_search yt-channel-detail';
-                    nameChannelYoutube.appendChild(divContainer);
-                }
-            }
-
-            // Xử lý khi đang trong trang search youtube
-            if (location.href.includes('https://www.youtube.com/results')) {
-                let contentResults = document.getElementsByClassName('ytd-item-section-renderer');
-                for (let index = 0; index < contentResults.length; index++) {
-                    let listItemResult = contentResults[index].getElementsByTagName('ytd-video-renderer');
-                    if (listItemResult && listItemResult.length > 0) {
-                        for (let i = 0; i < listItemResult.length; i++) {
-                            let itemResult = listItemResult[i];
-                            if (itemResult['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                                let tagLink = itemResult.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0];
-                                let idChanel = tagLink.getAttribute('href');
-                                if (idChanel.includes('channel')) {
-                                    let divContainer = createDevContainer(idChanel);
-                                    itemResult.style = "position: relative";
-                                    divContainer['className'] = 'qcuidfb_btn_search yt-channel-owner';
-                                    itemResult.appendChild(divContainer);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            // Xử lý khi đang trong trang chủ youtube
-            if (location.origin === location.href.substring(0, 23)) {
-                // console.log(document.getElementById('contents'));
-                let listYoutubeCard = document.getElementsByTagName('ytd-rich-item-renderer');
-                for (let index = 0; index < listYoutubeCard.length; index++) {
-                    let item = listYoutubeCard[index];
-                    // Điều kiện để lọc ra các thằng có id
-                    if (item.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string').length === 1) {
-                        // Tìm ra thẻ a có chứa link youtube
-                        if (item.getElementsByClassName('yt-simple-endpoint style-scope ytd-rich-grid-video-renderer').length > 0) {
-                            let tagLink = item.getElementsByClassName('yt-simple-endpoint style-scope ytd-rich-grid-video-renderer')[0];
-                            if (tagLink) {
-                                let id = tagLink.getAttribute('href');
-                                if (tagLink.parentNode.getElementsByClassName('qcuidfb_btn_search').length === 0) {
-                                    if (id.includes('channel')) {
-                                        let divContainer = createDevContainer(id);
-                                        tagLink.style = "display: flex; align-items: center;flex-direction: column";
-                                        divContainer['className'] = 'qcuidfb_btn_search yt-item-home';
-                                        tagLink.parentNode.appendChild(divContainer);
-                                    }
-                                }
-                            }
-                        }
-                        // let nameChannel = item.getElementsByTagName('a')[3];
-                        // console.log('item: ',item.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string'));
-                    }
-                    // let listItemResult = listYoutubeCard[index].getElementsByTagName('ytd-video-renderer');
-                    // if (listItemResult && listItemResult.length > 0) {
-                    //     for (let i = 0; i < listItemResult.length; i++) {
-                    //         let itemResult = listItemResult[i];
-                    //         if (itemResult['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                    //             let tagLink = itemResult.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0];
-                    //             let idChanel = tagLink.getAttribute('href').split('/channel/')[1];
-                    //             let divContainer = createDevContainer(idChanel);
-                    //             tagLink.style = "display: flex; align-items: center;";
-                    //             divContainer['className'] = 'qcuidfb_btn_search yt-channel-owner';
-                    //             tagLink.appendChild(divContainer);
-                    //             console.log(tagLink)
-                    //         }
-                    //     }
-                    // }
-                }
-            }
-
-            // END youtube
-            // TODO YOUTUBE ---------------------------------------------------------------------------------------------------------------
-
             // _3u1 _gli _6pe1 _87m1 là class nhận biết trong group
             // Xử lý thêm button trong phần group
-            if (document.getElementById('BrowseResultsContainer')) {
+            if (document.getElementById('BrowseResultsContainer') && location.href.includes('facebook.com/search/groups')) {
                 let listGroup = document['getElementsByClassName']('_3u1 _gli _6pe1 _87m1');
                 try {
                     for (let index = 0; index < listGroup['length']; index++) {
@@ -259,6 +149,7 @@
                 } catch (ex1) {}
             };
 
+            // Tạo button trong trang chi tiết trang cá nhân FB
             try {
                 // Tạo button trong trang chi tiết trang cá nhân FB
                 if (document['getElementById']('fbProfileCover') != null && document['getElementById']('pagelet_timeline_profile_actions')['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
@@ -280,8 +171,9 @@
                     }
                 }
             } catch (ex3) {};
+
+            // Hiển thị trong phần hover vào mội tên người dùng facebook sẽ hiển thị ra 1 cái popup
             try {
-                // Hiển thị trong phần hover vào mội tên người dùng facebook sẽ hiển thị ra 1 cái popup
                 if (document['getElementsByClassName']('hovercardButtonGroup')['length'] > 0) {
                     let listButtonGroups = document['getElementsByClassName']('hovercardButtonGroup');
                     try {
@@ -324,8 +216,9 @@
                     }
                 }
             } catch (ex3) {};
+
+            // Nếu trong danh sách tìm kiếm bạn bè facebook
             try {
-                // Nếu trong danh sách tìm kiếm facebook
                 if (document['getElementsByClassName']('FriendButton')['length'] > 0) {
                     let friendButtons = document['getElementsByClassName']('FriendButton');
                     try {
@@ -347,9 +240,9 @@
                 }
             } catch (ex3) {};
 
+            // Nếu trong danh sách tìm kiếm page
             try {
-                // Nếu trong danh sách tìm kiếm page
-                if (document['getElementsByClassName']('PageLikeButton')['length'] > 0) {
+                if (document['getElementsByClassName']('PageLikeButton')['length'] > 0 && location.href.includes('facebook.com/search/pages')) {
                     let likeButtons = document['getElementsByClassName']('PageLikeButton');
                     try {
                         for (let index = 0; index < likeButtons['length']; index++) {
@@ -453,7 +346,6 @@
                 token = tokens.token;
                 // check có token mới được gọi API
                 if (token) {
-                    // TODO chiều 07/05 cần xem lại đống này đê data gửi đi được động theo url
                     const mappingSourceType = {
                         'https://www.facebook.com': 'facebook',
                         'https://www.youtube.com': 'youtube'
@@ -488,8 +380,7 @@
         return buttonInner
     }
 
-    if (document['location']['href']['indexOf']('facebook') > -1
-        || document['location']['href']['indexOf']('youtube') > -1) {
+    if (document['location']['href']['indexOf']('facebook') > -1) {
         createHtml()
     };
 })()

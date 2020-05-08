@@ -1,12 +1,11 @@
 {
   "name": "Social box",
-  "description": "Tiện ích của social box",
-  "version": "0.0.7",
+  "description": "Tiện ích của social box1",
+  "version": "0.0.9",
   "permissions": [
     "cookies",
     "tabs",
     "storage",
-    "*://*.google.com",
     "http://sbox.staging/*",
     "https://sbox.staging/*",
     "activeTab",
