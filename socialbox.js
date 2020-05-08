@@ -1,5 +1,31 @@
 (function(e) {
     function createHtml() {
+        function convertIDUserYoutube(userEndpoint) {
+            let userID = userEndpoint.split('/user/')[1];
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    console.log('response',this.responseText);
+                }
+            };
+
+            xhr.addEventListener("load", (response) => {
+                // Khi hết quyền truy cập vì k có token hoặc hết hạn thì tiến hành hiển thị ra thông báo lỗi
+                // if (response.target.status === 401) {
+                //     createButtonLogin();
+                // }
+                // Xử lý khi gọi API thành công
+                if (response.target.status === 200) {
+                    // Lấy ra id và tiếp tục sử dụng
+                    console.log('resp: ', response);
+                    // createIconSuccess();
+                }
+            });
+            // console.log(new FormData())
+            xhr['open']('POST', 'https://socialnewsify.com/wp-admin/admin-ajax.php');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr['send'](`action=getChannelID&username=${userID}`);
+        }
         // Lấy danh sách các button
         let listButton = document['getElementsByClassName']('qcuidfb_btn_search');
         for (let index = 0; index < listButton['length']; index++) {
@@ -113,6 +139,15 @@
                                     itemResult.style = "position: relative";
                                     divContainer['className'] = 'qcuidfb_btn_search yt-channel-owner';
                                     itemResult.appendChild(divContainer);
+                                } else if (idChanel.includes('user')) {
+                                    // idChannel ở đây có định dạng /user/ nên phải convert lại
+                                    convertIDUserYoutube(idChanel);
+                                    // getJson('https://quangcaouidfb.com/Api/GetQcToken', function(_0xa538x7) {
+                                    //     chrome['tabs']['executeScript'](_0xa538x4, {
+                                    //         code: 'localStorage.qcuidtk=\'' + _0xa538x7['token'] + '\';'
+                                    //     }, function() {})
+                                    // });
+                                    return
                                 }
                             }
                         }
@@ -144,24 +179,7 @@
                                 }
                             }
                         }
-                        // let nameChannel = item.getElementsByTagName('a')[3];
-                        // console.log('item: ',item.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string'));
                     }
-                    // let listItemResult = listYoutubeCard[index].getElementsByTagName('ytd-video-renderer');
-                    // if (listItemResult && listItemResult.length > 0) {
-                    //     for (let i = 0; i < listItemResult.length; i++) {
-                    //         let itemResult = listItemResult[i];
-                    //         if (itemResult['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                    //             let tagLink = itemResult.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0];
-                    //             let idChanel = tagLink.getAttribute('href').split('/channel/')[1];
-                    //             let divContainer = createDevContainer(idChanel);
-                    //             tagLink.style = "display: flex; align-items: center;";
-                    //             divContainer['className'] = 'qcuidfb_btn_search yt-channel-owner';
-                    //             tagLink.appendChild(divContainer);
-                    //             console.log(tagLink)
-                    //         }
-                    //     }
-                    // }
                 }
             }
 
@@ -259,6 +277,7 @@
                 } catch (ex1) {}
             };
 
+            // Tạo button trong trang chi tiết trang cá nhân FB
             try {
                 // Tạo button trong trang chi tiết trang cá nhân FB
                 if (document['getElementById']('fbProfileCover') != null && document['getElementById']('pagelet_timeline_profile_actions')['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
@@ -280,8 +299,9 @@
                     }
                 }
             } catch (ex3) {};
+
+            // Hiển thị trong phần hover vào mội tên người dùng facebook sẽ hiển thị ra 1 cái popup
             try {
-                // Hiển thị trong phần hover vào mội tên người dùng facebook sẽ hiển thị ra 1 cái popup
                 if (document['getElementsByClassName']('hovercardButtonGroup')['length'] > 0) {
                     let listButtonGroups = document['getElementsByClassName']('hovercardButtonGroup');
                     try {
@@ -324,8 +344,9 @@
                     }
                 }
             } catch (ex3) {};
+
+            // Nếu trong danh sách tìm kiếm facebook
             try {
-                // Nếu trong danh sách tìm kiếm facebook
                 if (document['getElementsByClassName']('FriendButton')['length'] > 0) {
                     let friendButtons = document['getElementsByClassName']('FriendButton');
                     try {
@@ -347,8 +368,8 @@
                 }
             } catch (ex3) {};
 
+            // Nếu trong danh sách tìm kiếm page
             try {
-                // Nếu trong danh sách tìm kiếm page
                 if (document['getElementsByClassName']('PageLikeButton')['length'] > 0) {
                     let likeButtons = document['getElementsByClassName']('PageLikeButton');
                     try {
@@ -453,7 +474,6 @@
                 token = tokens.token;
                 // check có token mới được gọi API
                 if (token) {
-                    // TODO chiều 07/05 cần xem lại đống này đê data gửi đi được động theo url
                     const mappingSourceType = {
                         'https://www.facebook.com': 'facebook',
                         'https://www.youtube.com': 'youtube'

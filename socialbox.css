@@ -112,6 +112,12 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
     position: relative;
     float: left;
 }
+
+.google-result-item {
+    position: absolute;
+    top: 22px;
+    left: -33px;
+}
 #pagelet_timeline_profile_actions{position: relative;}
 .hovercardButtonGroup {position: relative}
 .qcuidfb_btn_userHoverCard {position: absolute;
