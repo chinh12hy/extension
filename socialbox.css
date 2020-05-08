@@ -58,7 +58,8 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
     top: 42px;
     right: 15px;
 }
-.data_result{
+.data_result,
+.content-error{
     user-select: text;
     line-height: 16px !important;
     background: white;
@@ -76,6 +77,9 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
     border-radius: 1px;
     z-index: 9;
     text-align: left;
+}
+.content-error {
+    right: -200px;
 }
 .data_result .qcuidfb_result_success {
     color: #4c8f19;
@@ -95,10 +99,13 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
     z-index: 9999;
 }
 .yt-video-owner {margin-left: 5px;}
+.yt-channel-owner .data_result {
+    right: -120px;
+}
 .yt-channel-detail {margin-left: 5px}
 .yt-item-home {
     position: absolute;
-    top: 57px;
+    bottom: 15px;
     left: 5px;
 }
 .yt-channel-owner {

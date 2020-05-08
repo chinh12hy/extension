@@ -37,6 +37,7 @@ function getCookies(domain, name)
     });
 }
 getCookies("http://sbox.staging/", "sbtoken");
+
 // Check khi nào url trên tab chrome thay đổi thì hoạt động hàm này
 chrome['tabs']['onUpdated']['addListener'](function(tabID, response) {
     if (response['status'] === 'complete') {

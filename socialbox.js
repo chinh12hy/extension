@@ -5,7 +5,6 @@
             let xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (this.readyState === 4 && this.status === 200) {
-                    console.log('response',this.responseText);
                 }
             };
 
@@ -17,7 +16,6 @@
                 // Xử lý khi gọi API thành công
                 if (response.target.status === 200) {
                     // Lấy ra id và tiếp tục sử dụng
-                    console.log('resp: ', response);
                     // createIconSuccess();
                 }
             });
@@ -86,18 +84,24 @@
         function handleCreateModuleExtension() {
             // TODO YOUTUBE ---------------------------------------------------------------------------------------------------------------
             // Xử lý ở youtube
-            // Xử lý khi đang xem video
+            // Xử lý thêm button khi đang xem video youtube
             if (location.href.includes('https://www.youtube.com/watch')) {
                 try {
                     if (document.getElementsByClassName('yt-simple-endpoint')) {
                         let nameChanelYoutube = document.getElementsByClassName('ytd-video-owner-renderer')[3];
                         let linkTag = nameChanelYoutube.getElementsByTagName('a')[0];
                         let divWrapExtension = linkTag.parentNode.getElementsByClassName('qcuidfb_btn_search')[0];
-                        // Vì thẻ html mình tạo trong youtube nó không xóa khi đổi router nên ta cứ check xem có cái thẻ ý thì
-                        // xóa đi tạo 1 thẻ mới để lấy chính xác id channel youtube nếu không sẽ chỉ lấy id của 1 channel đâu tiên khi load trang
-                        // TODO cần tìm cách khá hơn để giải quết cái này
                         if (divWrapExtension) {
-                            linkTag.parentNode.removeChild(divWrapExtension)
+                            const currentHref = linkTag.getAttribute('href');
+                            const buttonHref = divWrapExtension.getAttribute('data-uid');
+                            if (currentHref !== buttonHref) {
+                                linkTag.parentNode.removeChild(divWrapExtension);
+                                let idChanel = linkTag.getAttribute('href');
+                                let divContainer = createDevContainer(idChanel);
+                                linkTag.parentNode.style = "display: flex; align-items: center;";
+                                divContainer['className'] = 'qcuidfb_btn_search yt-video-owner';
+                                linkTag.parentNode.appendChild(divContainer);
+                            }
                         }
                         if (linkTag && nameChanelYoutube['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
                             let idChanel = linkTag.getAttribute('href');
@@ -113,13 +117,16 @@
             // Xử lý khi đang trong home của 1 kênh youtube
             if (location.href.includes('https://www.youtube.com/channel')) {
                 // Xử lý cho chanel ở đây
-                let nameChannelYoutube = document.getElementById('channel-name');
-                if (nameChannelYoutube['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                    let idChanel = location.href.split('https://www.youtube.com')[1];
-                    let divContainer = createDevContainer(idChanel);
-                    nameChannelYoutube.style = "display: flex; align-items: center;";
-                    divContainer['className'] = 'qcuidfb_btn_search yt-channel-detail';
-                    nameChannelYoutube.appendChild(divContainer);
+                if (document.getElementById('channel-name')) {
+                    let nameChannelYoutube = document.getElementById('channel-name');
+                    if (nameChannelYoutube['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                        let idChanel = location.href.split('https://www.youtube.com')[1];
+                        let divContainer = createDevContainer(idChanel);
+                        console.log('divContainer', divContainer);
+                        nameChannelYoutube.style = "display: flex; align-items: center;";
+                        divContainer['className'] = 'qcuidfb_btn_search yt-channel-detail';
+                        nameChannelYoutube.appendChild(divContainer);
+                    }
                 }
             }
 
@@ -169,12 +176,13 @@
                             let tagLink = item.getElementsByClassName('yt-simple-endpoint style-scope ytd-rich-grid-video-renderer')[0];
                             if (tagLink) {
                                 let id = tagLink.getAttribute('href');
-                                if (tagLink.parentNode.getElementsByClassName('qcuidfb_btn_search').length === 0) {
+                                if (item.getElementsByClassName('qcuidfb_btn_search').length === 0) {
                                     if (id.includes('channel')) {
                                         let divContainer = createDevContainer(id);
                                         tagLink.style = "display: flex; align-items: center;flex-direction: column";
                                         divContainer['className'] = 'qcuidfb_btn_search yt-item-home';
-                                        tagLink.parentNode.appendChild(divContainer);
+                                        item.style = "position: relative";
+                                        item.appendChild(divContainer);
                                     }
                                 }
                             }

@@ -44,7 +44,7 @@
         document['getElementsByTagName']('body')[0]['appendChild'](buttonInner);
         buttonInner['innerHTML'] = iconInner +
             '<img class=\'qcuidfb_img_loading\' src=\'https://quangcaouidfb.com/images/loading-blue.gif\'/>' +
-            '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
+            '<span class=\'content-error\' ></span> <span class="icon-success"></span>';
 
         // Hàm xử lý khi click icon của extension
         function handleClickButton() {
@@ -53,11 +53,11 @@
             // let facebookName = divContainer['getAttribute']('data-fbname');
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
-                let container = divContainer['getElementsByClassName']('data_result')[0];
+                let container = divContainer['getElementsByClassName']('content-error')[0];
                 let notify = `<span> Bạn chưa đăng nhập vào SOCIALBOX </span> <br/>`;
                 let linkLogin = `<span> vui lòng click vào <a href="http://sbox.staging/login?ref=google" target="_blank"> đây </a> để tiếp tục sử dụng sản phẩm </span>`
                 container['innerHTML'] = `${notify} ${linkLogin}`;
-                divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'block';
+                divContainer['getElementsByClassName']('content-error')[0]['style']['display'] = 'block';
                 divContainer['removeEventListener']('click', divContainer)
             }
 
