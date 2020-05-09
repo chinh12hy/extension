@@ -57,9 +57,7 @@
         buttonInner['className'] = 'container-extension';
         buttonInner['setAttribute']('data-url', url);
         document['getElementsByTagName']('body')[0]['appendChild'](buttonInner);
-        buttonInner['innerHTML'] = iconInner +
-            '<img class=\'qcuidfb_img_loading\' src=\'https://quangcaouidfb.com/images/loading-blue.gif\'/>' +
-            '<span class=\'content-error\' ></span> <span class="icon-success"></span>';
+        buttonInner['innerHTML'] = iconInner + '<span class=\'content-error\' ></span> <span class="icon-success"></span>';
 
         // Hàm xử lý khi click icon của extension
         function handleClickButton() {

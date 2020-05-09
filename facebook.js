@@ -316,9 +316,7 @@
         buttonInner['className'] = 'container-extension';
         buttonInner['setAttribute']('data-uid', userId);
         document['getElementsByTagName']('body')[0]['appendChild'](buttonInner);
-        buttonInner['innerHTML'] = iconInner +
-            '<img class=\'qcuidfb_img_loading\' src=\'https://quangcaouidfb.com/images/loading-blue.gif\'/>' +
-            '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
+        buttonInner['innerHTML'] = iconInner + '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
 
         // Hàm này khi click vào icon trên màn hình sẽ được gọi tới và mình sẽ xử lỹ sự kiện trong hàm này.
         function handleClickButton() {

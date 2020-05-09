@@ -15,6 +15,7 @@
                         let nameChanelYoutube = document.getElementsByClassName('ytd-video-owner-renderer')[3];
                         let linkTag = nameChanelYoutube.getElementsByTagName('a')[0];
                         let divWrapExtension = wrapExtensionTag.getElementsByClassName('container-extension')[0];
+                        let channelName = linkTag.textContent;
                         if (divWrapExtension) {
                             const currentHref = linkTag.getAttribute('href');
                             const buttonHref = divWrapExtension.getAttribute('data-uid');
@@ -22,7 +23,7 @@
                             if (currentHref !== buttonHref) {
                                 wrapExtensionTag.removeChild(divWrapExtension);
                                 let idChanel = linkTag.getAttribute('href');
-                                let divContainer = createDevContainer(idChanel);
+                                let divContainer = createDevContainer(idChanel, channelName);
                                 wrapExtensionTag.style = "position: relative";
                                 divContainer['className'] = 'container-extension yt-video-owner';
                                 wrapExtensionTag.appendChild(divContainer);
@@ -30,7 +31,7 @@
                         }
                         if (linkTag && wrapExtensionTag['getElementsByClassName']('container-extension')['length'] === 0) {
                             let idChanel = linkTag.getAttribute('href');
-                            let divContainer = createDevContainer(idChanel);
+                            let divContainer = createDevContainer(idChanel, channelName);
                             divContainer['className'] = 'container-extension yt-video-owner';
                             wrapExtensionTag.style = "position: relative";
                             wrapExtensionTag.appendChild(divContainer);
@@ -45,8 +46,9 @@
                 if (document.getElementById('channel-name')) {
                     let nameChannelYoutube = document.getElementById('channel-name');
                     if (nameChannelYoutube['getElementsByClassName']('container-extension')['length'] === 0) {
+                        let channelName = nameChannelYoutube.getElementsByTagName('yt-formatted-string')[0].textContent || ''
                         let idChanel = location.href.split('https://www.youtube.com')[1];
-                        let divContainer = createDevContainer(idChanel);
+                        let divContainer = createDevContainer(idChanel, channelName);
                         nameChannelYoutube.style = "display: flex; align-items: center;";
                         divContainer['className'] = 'container-extension yt-channel-detail';
                         nameChannelYoutube.appendChild(divContainer);
@@ -64,15 +66,16 @@
                             let itemResult = listItemResult[i];
                             if (itemResult['getElementsByClassName']('container-extension')['length'] === 0) {
                                 let tagLink = itemResult.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0];
-                                let idChanel = tagLink.getAttribute('href');
-                                if (idChanel.includes('channel')) {
-                                    let divContainer = createDevContainer(idChanel);
+                                let channelName = tagLink.textContent || '';
+                                let channelID = tagLink.getAttribute('href');
+                                if (channelID.includes('channel')) {
+                                    let divContainer = createDevContainer(channelID, channelName);
                                     itemResult.style = "position: relative";
                                     divContainer['className'] = 'container-extension yt-channel-owner';
                                     itemResult.appendChild(divContainer);
                                 } else {
                                     // xử thêm 1 button xóa ản nó đi để tránh chạy for vô hạn thừa thãi nặng chương trình
-                                    let divContainer = createDevContainer(idChanel);
+                                    let divContainer = createDevContainer(channelID);
                                     divContainer['className'] = 'container-extension yt-channel-owner';
                                     divContainer.style = "display: none";
                                     itemResult.appendChild(divContainer);
@@ -95,10 +98,11 @@
                         if (item.getElementsByClassName('yt-simple-endpoint style-scope ytd-rich-grid-video-renderer').length > 0) {
                             let tagLink = item.getElementsByClassName('yt-simple-endpoint style-scope ytd-rich-grid-video-renderer')[0];
                             if (tagLink) {
-                                let id = tagLink.getAttribute('href');
+                                let channelID = tagLink.getAttribute('href');
                                 if (item.getElementsByClassName('container-extension').length === 0) {
-                                    if (id.includes('channel')) {
-                                        let divContainer = createDevContainer(id);
+                                    if (channelID.includes('channel')) {
+                                        let channelName = tagLink.getAttribute('title') || '';
+                                        let divContainer = createDevContainer(channelID, channelName);
                                         tagLink.style = "display: flex; align-items: center;flex-direction: column";
                                         divContainer['className'] = 'container-extension yt-item-home';
                                         item.style = "position: relative";
@@ -141,9 +145,9 @@
         handleCreateModuleExtension();
     }
 
-    function createDevContainer(userId) {
+    function createDevContainer(channelID, channelName = '') {
         let buttonInner = document['createElement']('div');
-        let iconInner = `<div class='qcuidfb_icon' title='Thêm vào danh sách nguồn'>
+        let iconInner = `<div class='qcuidfb_icon' title='Thêm ${channelName} vào danh sách nguồn'>
             <svg class="icon" width="18" height="18" viewBox="0 0 18 18">
               <g id="add-source" transform="translate(-1103 -111)">
                 <g id="border-icon" data-name="Ellipse 95" transform="translate(1103 111)" fill="#fff" stroke-width="1">
@@ -160,11 +164,9 @@
             </svg>
         </div>`
         buttonInner['className'] = 'container-extension';
-        buttonInner['setAttribute']('data-uid', userId);
+        buttonInner['setAttribute']('data-uid', channelID);
         document['getElementsByTagName']('body')[0]['appendChild'](buttonInner);
-        buttonInner['innerHTML'] = iconInner +
-            '<img class=\'qcuidfb_img_loading\' src=\'https://quangcaouidfb.com/images/loading-blue.gif\'/>' +
-            '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
+        buttonInner['innerHTML'] = iconInner + '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
 
         // Hàm này khi click vào icon trên màn hình sẽ được gọi tới và mình sẽ xử lỹ sự kiện trong hàm này.
         function handleClickButton() {
