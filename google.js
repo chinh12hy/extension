@@ -78,8 +78,25 @@
                 divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
                 divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('icon-success')[0];
-                let iconSuccess = `<img src="https://w0.pngwave.com/png/873/563/computer-icons-icon-design-business-success-png-clip-art-thumbnail.png"
- width="20" height="20" alt="Thành công" title="Thêm thành công"/>`;
+                let iconSuccess = `<svg class="icon-success" width="18" height="18" viewBox="0 0 18 18">
+                  <g id="add-source-tick" transform="translate(-1064 -172)">
+                    <g id="Ellipse_97" data-name="Ellipse 97" transform="translate(1064 172)" fill="#fff" stroke="#36b37e" stroke-width="1">
+                      <circle cx="9" cy="9" r="9" stroke="none"/>
+                      <circle cx="9" cy="9" r="8.5" fill="none"/>
+                    </g>
+                    <g id="Layer_2" data-name="Layer 2" transform="translate(1064 172)">
+                      <g id="plus">
+                        <rect id="Rectangle_483" data-name="Rectangle 483" width="18" height="18" transform="translate(18 18) rotate(180)" fill="#0052cc" opacity="0"/>
+                        <g id="Layer_2-2" data-name="Layer 2" transform="translate(0.922 0.922)">
+                          <g id="checkmark-circle">
+                            <rect id="Rectangle_502" data-name="Rectangle 502" width="16" height="16" transform="translate(0.078 0.078)" opacity="0"/>
+                            <path id="Path_1331" data-name="Path 1331" d="M9.15,9.572a.676.676,0,0,0-.956.956l2.02,2.02a.653.653,0,0,0,.963-.034l4.712-5.385a.673.673,0,0,0-1.01-.889l-4.187,4.847Z" transform="translate(-3.613 -1.972)" fill="#36b37e"/>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </svg>`;
                 container['innerHTML'] = `${iconSuccess}`;
                 divContainer['removeEventListener']('click', divContainer)
             }
