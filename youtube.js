@@ -1,90 +1,40 @@
 
 (function(e) {
     function createHtml() {
-        let listButton = document['getElementsByClassName']('qcuidfb_btn_search');
+        let listButton = document['getElementsByClassName']('container-extension');
         for (let index = 0; index < listButton['length']; index++) {
             listButton[index]['outerHTML'] = ''
         };
 
-        // Xử lý ở facebook
-        try {
-            let url = document['location']['href'];
-            if (url['indexOf']('/inbox/') > -1 && url['indexOf']('mailbox_id=') > -1) {
-                let regex = /selected_item_id=(\d+)/;
-                let id = regex['exec'](url)[1];
-                let divContainer = createDevContainer(id);
-                try {
-                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_pagechat';
-                    let isAppend = false;
-                    let listTable = document['getElementById']('globalContainer')['getElementsByClassName']('fb_content')[0]['getElementsByTagName']('table')[0]['getElementsByTagName']('div');
-                    for (let index = 0; index < listTable['length']; index++) {
-                        if (listTable[index]['getAttribute']('data-testid') === 'action_spam') {
-                            listTable[index]['parentNode']['appendChild'](divContainer);
-                            isAppend = true
-                        }
-                    };
-                    if (!isAppend) {
-                        document['getElementById']('globalContainer')['getElementsByClassName']('fb_content')[0]['getElementsByTagName']('table')[0]['getElementsByTagName']('td')[1]['appendChild'](divContainer);
-                        document['getElementById']('globalContainer')['getElementsByClassName']('fb_content')[0]['getElementsByTagName']('table')[0]['getElementsByTagName']('td')[2]['appendChild'](divContainer)
-                    }
-                } catch (ex) {
-                    createContainerButton(divContainer)
-                }
-            };
-            if (url['indexOf']('com/messages/t/') > -1) {
-                let regex = /messages\/t\/(\d+)/;
-                let _0xfea0x33 = '';
-                let _0xfea0x1b = regex['exec'](url);
-                if (_0xfea0x1b == null) {
-                    let listTagA = document['getElementsByTagName']('a');
-                    for (let index = 0; index < listTagA['length']; index++) {
-                        _0xfea0x33 = listTagA[index]['getAttribute']('uid');
-                        if (_0xfea0x33 !== null && _0xfea0x33 !== '') {
-                            break
-                        }
-                    }
-                } else {
-                    _0xfea0x33 = _0xfea0x1b[1]
-                };
-                let divContainer = createDevContainer(_0xfea0x33);
-                try {
-                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_profilechat';
-                    let _0xfea0x38 = document['getElementsByClassName']('fb_content ')[0]['getElementsByTagName']('ul')[1];
-                    _0xfea0x38['appendChild'](divContainer)
-                } catch (ex) {
-                    createContainerButton(divContainer)
-                }
-            }
-        } catch (ex7) {};
-
         function handleCreateModuleExtension() {
-            // TODO YOUTUBE ---------------------------------------------------------------------------------------------------------------
-            // Xử lý ở youtube
             // Xử lý thêm button khi đang xem video youtube
             if (location.href.includes('https://www.youtube.com/watch')) {
                 try {
                     if (document.getElementsByClassName('yt-simple-endpoint')) {
+                        let wrapExtensionTag = document.getElementById('meta');
                         let nameChanelYoutube = document.getElementsByClassName('ytd-video-owner-renderer')[3];
                         let linkTag = nameChanelYoutube.getElementsByTagName('a')[0];
-                        let divWrapExtension = linkTag.parentNode.getElementsByClassName('qcuidfb_btn_search')[0];
+                        let divWrapExtension = wrapExtensionTag.getElementsByClassName('container-extension')[0];
+                        let channelName = linkTag.textContent;
                         if (divWrapExtension) {
                             const currentHref = linkTag.getAttribute('href');
                             const buttonHref = divWrapExtension.getAttribute('data-uid');
+                            // check link giữa channel và data trong button khác nhau thì sẽ tiến hành xóa cái button cũ đi tạo cái button mới với link của channel hiện tại
                             if (currentHref !== buttonHref) {
-                                linkTag.parentNode.removeChild(divWrapExtension);
+                                wrapExtensionTag.removeChild(divWrapExtension);
                                 let idChanel = linkTag.getAttribute('href');
-                                let divContainer = createDevContainer(idChanel);
-                                linkTag.parentNode.style = "display: flex; align-items: center;";
-                                divContainer['className'] = 'qcuidfb_btn_search yt-video-owner';
-                                linkTag.parentNode.appendChild(divContainer);
+                                let divContainer = createDevContainer(idChanel, channelName);
+                                wrapExtensionTag.style = "position: relative";
+                                divContainer['className'] = 'container-extension yt-video-owner';
+                                wrapExtensionTag.appendChild(divContainer);
                             }
                         }
-                        if (linkTag && nameChanelYoutube['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                        if (linkTag && wrapExtensionTag['getElementsByClassName']('container-extension')['length'] === 0) {
                             let idChanel = linkTag.getAttribute('href');
-                            let divContainer = createDevContainer(idChanel);
-                            linkTag.parentNode.style = "display: flex; align-items: center;";
-                            divContainer['className'] = 'qcuidfb_btn_search yt-video-owner';
-                            linkTag.parentNode.appendChild(divContainer);
+                            let divContainer = createDevContainer(idChanel, channelName);
+                            divContainer['className'] = 'container-extension yt-video-owner';
+                            wrapExtensionTag.style = "position: relative";
+                            wrapExtensionTag.appendChild(divContainer);
                         }
                     };
                 } catch (error) {};
@@ -95,12 +45,12 @@
                 // Xử lý cho chanel ở đây
                 if (document.getElementById('channel-name')) {
                     let nameChannelYoutube = document.getElementById('channel-name');
-                    if (nameChannelYoutube['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                    if (nameChannelYoutube['getElementsByClassName']('container-extension')['length'] === 0) {
+                        let channelName = nameChannelYoutube.getElementsByTagName('yt-formatted-string')[0].textContent || ''
                         let idChanel = location.href.split('https://www.youtube.com')[1];
-                        let divContainer = createDevContainer(idChanel);
-                        console.log('divContainer', divContainer);
+                        let divContainer = createDevContainer(idChanel, channelName);
                         nameChannelYoutube.style = "display: flex; align-items: center;";
-                        divContainer['className'] = 'qcuidfb_btn_search yt-channel-detail';
+                        divContainer['className'] = 'container-extension yt-channel-detail';
                         nameChannelYoutube.appendChild(divContainer);
                     }
                 }
@@ -114,13 +64,20 @@
                     if (listItemResult && listItemResult.length > 0) {
                         for (let i = 0; i < listItemResult.length; i++) {
                             let itemResult = listItemResult[i];
-                            if (itemResult['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                            if (itemResult['getElementsByClassName']('container-extension')['length'] === 0) {
                                 let tagLink = itemResult.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0];
-                                let idChanel = tagLink.getAttribute('href');
-                                if (idChanel.includes('channel')) {
-                                    let divContainer = createDevContainer(idChanel);
+                                let channelName = tagLink.textContent || '';
+                                let channelID = tagLink.getAttribute('href');
+                                if (channelID.includes('channel')) {
+                                    let divContainer = createDevContainer(channelID, channelName);
                                     itemResult.style = "position: relative";
-                                    divContainer['className'] = 'qcuidfb_btn_search yt-channel-owner';
+                                    divContainer['className'] = 'container-extension yt-channel-owner';
+                                    itemResult.appendChild(divContainer);
+                                } else {
+                                    // xử thêm 1 button xóa ản nó đi để tránh chạy for vô hạn thừa thãi nặng chương trình
+                                    let divContainer = createDevContainer(channelID);
+                                    divContainer['className'] = 'container-extension yt-channel-owner';
+                                    divContainer.style = "display: none";
                                     itemResult.appendChild(divContainer);
                                 }
                             }
@@ -131,8 +88,7 @@
 
 
             // Xử lý khi đang trong trang chủ youtube
-            if (location.origin === location.href.substring(0, 23)) {
-                // console.log(document.getElementById('contents'));
+            if (location.pathname === '/') {
                 let listYoutubeCard = document.getElementsByTagName('ytd-rich-item-renderer');
                 for (let index = 0; index < listYoutubeCard.length; index++) {
                     let item = listYoutubeCard[index];
@@ -142,12 +98,13 @@
                         if (item.getElementsByClassName('yt-simple-endpoint style-scope ytd-rich-grid-video-renderer').length > 0) {
                             let tagLink = item.getElementsByClassName('yt-simple-endpoint style-scope ytd-rich-grid-video-renderer')[0];
                             if (tagLink) {
-                                let id = tagLink.getAttribute('href');
-                                if (item.getElementsByClassName('qcuidfb_btn_search').length === 0) {
-                                    if (id.includes('channel')) {
-                                        let divContainer = createDevContainer(id);
+                                let channelID = tagLink.getAttribute('href');
+                                if (item.getElementsByClassName('container-extension').length === 0) {
+                                    if (channelID.includes('channel')) {
+                                        let channelName = tagLink.getAttribute('title') || '';
+                                        let divContainer = createDevContainer(channelID, channelName);
                                         tagLink.style = "display: flex; align-items: center;flex-direction: column";
-                                        divContainer['className'] = 'qcuidfb_btn_search yt-item-home';
+                                        divContainer['className'] = 'container-extension yt-item-home';
                                         item.style = "position: relative";
                                         item.appendChild(divContainer);
                                     }
@@ -158,8 +115,29 @@
                 }
             }
 
-            // END youtube
-            // TODO YOUTUBE ---------------------------------------------------------------------------------------------------------------
+            // Xử lý trong trang trending
+            if (location.href.includes('youtube.com/feed/trending')) {
+                let listTrendingVideo = document.getElementsByTagName('ytd-video-renderer');
+                for (let index = 0; index < listTrendingVideo.length; index++) {
+                    let videoTrending = listTrendingVideo[index];
+                    if (videoTrending.getElementsByClassName('container-extension').length === 0) {
+                        let url = videoTrending.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0].getAttribute('href');
+                        if (url.includes('channel')) {
+                            let divContainer = createDevContainer(url);
+                            videoTrending.style = "display: flex; align-items: center;flex-direction: column";
+                            divContainer['className'] = 'container-extension yt-item-trending';
+                            videoTrending.style = "position: relative";
+                            videoTrending.appendChild(divContainer);
+                        } else {
+                            // trường hợp này tạo để đấy để tránh bị chạy vòng lặp vô hạn ở cái điều kiện ở trên
+                            let divContainer = createDevContainer(url);
+                            divContainer.style = "display: none";
+                            videoTrending.appendChild(divContainer);
+                        }
+                    }
+                }
+                return
+            }
             setTimeout(function() {
                 handleCreateModuleExtension()
             }, 2000)
@@ -167,28 +145,28 @@
         handleCreateModuleExtension();
     }
 
-    function createContainerButton(divContainer) {
-        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_searchglobal';
-        document['getElementsByTagName']('body')[0]['appendChild'](divContainer)
-    }
-
-    let results = [];
-    try {
-        results = JSON['parse'](localStorage['getItem']('qcuidResults'));
-        if (results == null) {
-            results = []
-        }
-    } catch (exx) {};
-
-    function createDevContainer(userId) {
+    function createDevContainer(channelID, channelName = '') {
         let buttonInner = document['createElement']('div');
-        let iconInner = `<span class=\'qcuidfb_icon\' title=\'Thêm vào danh sách nguồn\'></span>`
-        buttonInner['className'] = 'qcuidfb_btn_search';
-        buttonInner['setAttribute']('data-uid', userId);
+        let iconInner = `<div class='qcuidfb_icon' title='Thêm ${channelName} vào danh sách nguồn'>
+            <svg class="icon" width="18" height="18" viewBox="0 0 18 18">
+              <g id="add-source" transform="translate(-1103 -111)">
+                <g id="border-icon" data-name="Ellipse 95" transform="translate(1103 111)" fill="#fff" stroke-width="1">
+                  <circle cx="9" cy="9" r="9" stroke="none"/>
+                  <circle cx="9" cy="9" r="8.5"/>
+                </g>
+                <g id="Layer_2" data-name="Layer 2" transform="translate(1103 111)">
+                  <g id="plus">
+                    <rect id="Rectangle_483" data-name="Rectangle 483" width="18" height="18" transform="translate(18 18) rotate(180)" opacity="0"/>
+                    <path id="Path_1307" data-name="Path 1307" d="M13.375,8.375H9.625V4.625a.625.625,0,0,0-1.25,0v3.75H4.625a.625.625,0,0,0,0,1.25h3.75v3.75a.625.625,0,0,0,1.25,0V9.625h3.75a.625.625,0,0,0,0-1.25Z"/>
+                  </g>
+                </g>
+              </g>
+            </svg>
+        </div>`
+        buttonInner['className'] = 'container-extension';
+        buttonInner['setAttribute']('data-uid', channelID);
         document['getElementsByTagName']('body')[0]['appendChild'](buttonInner);
-        buttonInner['innerHTML'] = iconInner +
-            '<img class=\'qcuidfb_img_loading\' src=\'https://quangcaouidfb.com/images/loading-blue.gif\'/>' +
-            '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
+        buttonInner['innerHTML'] = iconInner + '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
 
         // Hàm này khi click vào icon trên màn hình sẽ được gọi tới và mình sẽ xử lỹ sự kiện trong hàm này.
         function handleClickButton() {
@@ -198,18 +176,11 @@
             let id = divContainer['getAttribute']('data-uid');
             // let facebookName = divContainer['getAttribute']('data-fbname');
             function createButtonLogin() {
-                let currentOriginUrl = location.origin;
-                const mappingCurrentUrl = {
-                    'https://www.facebook.com': 'facebook',
-                    'https://www.youtube.com': 'youtube'
-                }
-                // ẩn icon đi
                 divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
-                let notify = `<span> Bạn chưa đăng nhập vào SOCIALBOX </span> <br/>`;
-                let linkLogin = `<span> vui lòng click vào <a href="http://sbox.staging/login?ref=${mappingCurrentUrl[currentOriginUrl]}" target="_blank"> đây </a> để tiếp tục sử dụng sản phẩm </span>`
-                container['innerHTML'] = `${notify} ${linkLogin}`;
-                divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'block';
+                let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=youtube" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                container['innerHTML'] = notify;
+                divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)
             }
 

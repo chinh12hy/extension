@@ -1,7 +1,7 @@
 (function(e) {
     function createHtml() {
         // Lấy danh sách các button
-        let listButton = document['getElementsByClassName']('qcuidfb_btn_search');
+        let listButton = document['getElementsByClassName']('container-extension');
         for (let index = 0; index < listButton['length']; index++) {
             listButton[index]['outerHTML'] = ''
         };
@@ -14,7 +14,7 @@
                 let id = regex['exec'](url)[1];
                 let divContainer = createDevContainer(id);
                 try {
-                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_pagechat';
+                    divContainer['className'] = 'container-extension fb_btn_pagechat';
                     let isAppend = false;
                     let listTable = document['getElementById']('globalContainer')['getElementsByClassName']('fb_content')[0]['getElementsByTagName']('table')[0]['getElementsByTagName']('div');
                     for (let index = 0; index < listTable['length']; index++) {
@@ -48,7 +48,7 @@
                 };
                 let divContainer = createDevContainer(_0xfea0x33);
                 try {
-                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_profilechat';
+                    divContainer['className'] = 'container-extension fb_btn_profilechat';
                     let _0xfea0x38 = document['getElementsByClassName']('fb_content ')[0]['getElementsByTagName']('ul')[1];
                     _0xfea0x38['appendChild'](divContainer)
                 } catch (ex) {
@@ -68,7 +68,7 @@
                         if (group.childNodes.length === 1) {
                             let id = JSON.parse(group.getAttribute('data-bt')).id;
                             let divContainer = createDevContainer(id);
-                            divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_group';
+                            divContainer['className'] = 'container-extension qcuidfb_btn_group';
                             group.appendChild(divContainer)
                         }
                     }
@@ -85,19 +85,20 @@
                                 let linkItem = link[index];
                                 // Tìm ra thằng nào có chứa id trong attrs
                                 if (linkItem['getAttribute']('data-hovercard') && !linkItem['getAttribute']('aria-hidden')) {
-                                    // LinkItem đến bước này vẫn lấy chính xác
-                                    let regex = /\?id=(\d+)/;
-                                    let dataHovercard = linkItem.getAttribute('data-hovercard');
-                                    // sau khi regex thì sẽ có sai sót làm thiếu linkItem ở đây
-                                    let id = regex['exec'](dataHovercard)[1];
+                                    // lọc điều kiện chỉ lấy những thằng là người comment không lấy mấy thằng được tag trong comment
+                                    if (linkItem.parentNode.className !== '_3l3x') {
+                                        // Kiểm tra xem thăng cha nó có button chưa nếu chưa có thì mới tiến hành tạo tránh tạo spam html
+                                        if (linkItem['parentNode']['getElementsByClassName']('container-extension')['length'] === 0) {
+                                            let regex = /\?id=(\d+)/;
+                                            let dataHoverCard = linkItem.getAttribute('data-hovercard');
+                                            // sau khi regex thì sẽ có sai sót làm thiếu linkItem ở đây
+                                            let id = regex['exec'](dataHoverCard)[1];
+                                            let facebookName = linkItem.textContent;
+                                            let button = createDevContainer(id, facebookName);
 
-                                    //  linkItem.parentNode.childNodes.length === 3
-                                    // Kiểm tra xem thăng cha nó có button chưa nếu chưa có thì mới tiến hành tạo tránh tạo spam html
-                                    if (linkItem['parentNode']['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                                        let button = createDevContainer(id);
-
-                                        button['className'] = 'qcuidfb_btn_search qcuidfb_btn_userCommentInner';
-                                        linkItem['parentNode'].append(button);
+                                            button['className'] = 'container-extension fb_btn_userCommentInner';
+                                            linkItem['parentNode'].append(button);
+                                        }
                                     }
                                 }
                             } catch (ex3) {}
@@ -113,7 +114,7 @@
                     for (let index = 0; index < container['length']; index++) {
                         let item = container[index];
                         // Nếu chưa có button nào thì mới tiến hành tạo button
-                        if (item['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0 || item.childNodes.length === 2) {
+                        if (item['getElementsByClassName']('container-extension')['length'] === 0 || item.childNodes.length === 2) {
                             let tagA = item['getElementsByTagName']('a');
                             for (let index = 0; index < tagA['length']; index++) {
                                 let itemHasID = tagA[index]['getAttribute']('data-hovercard') + '';
@@ -121,13 +122,14 @@
                                 if (itemHasID['indexOf']('user.php') > -1 ) {
                                     let regex = /hovercard\/user\.php\?id=(\d+)/;
                                     let id = regex['exec'](itemHasID)[1];
-                                    let divContainer = createDevContainer(id);
+                                    let facebookName = tagA[index].getAttribute('title');
+                                    let divContainer = createDevContainer(id, facebookName);
                                     try {
                                         divContainer['setAttribute']('data-fbtype', 'post');
                                         divContainer['setAttribute']('data-fbname', tagA[index]['getAttribute']('title'))
                                     } catch (ex) {};
                                     try {
-                                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userContentWrapper';
+                                        divContainer['className'] = 'container-extension fb_btn_userContentWrapper';
                                         item['appendChild'](divContainer)
                                     } catch (ex) {};
                                     break
@@ -136,9 +138,16 @@
                                 if (itemHasID['indexOf']('page.php') > -1 ) {
                                     let regex = /hovercard\/page\.php\?id=(\d+)/;
                                     let idPage = regex['exec'](itemHasID)[1];
-                                    let divContainer = createDevContainer(idPage);
+                                    let divContainer = null;
+                                    if (tagA[index].textContent) {
+                                        let pageName = tagA[index].textContent;
+                                        divContainer = createDevContainer(idPage, pageName);
+                                    } else {
+                                        let labelPageImage = tagA[index].getElementsByTagName('img')[0].getAttribute('aria-label');
+                                        divContainer = createDevContainer(idPage, labelPageImage);
+                                    }
                                     try {
-                                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userContentWrapper';
+                                        divContainer['className'] = 'container-extension fb_btn_userContentWrapper';
                                         item['appendChild'](divContainer)
                                     } catch (ex) {};
                                     break
@@ -152,17 +161,19 @@
             // Tạo button trong trang chi tiết trang cá nhân FB
             try {
                 // Tạo button trong trang chi tiết trang cá nhân FB
-                if (document['getElementById']('fbProfileCover') != null && document['getElementById']('pagelet_timeline_profile_actions')['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                if (document['getElementById']('fbProfileCover') != null
+                    && document['getElementById']('pagelet_timeline_profile_actions')['getElementsByClassName']('container-extension')['length'] === 0) {
                     let dataFBUser = document['getElementById']('pagelet_timeline_main_column')['getAttribute']('data-gt');
                     let userID = JSON['parse'](dataFBUser)['profile_owner'];
-                    let divContainer = createDevContainer(userID);
+                    let facebookName = document.getElementById('fb-timeline-cover-name').textContent;
+                    let divContainer = createDevContainer(userID, facebookName);
                     try {
                         // comment
                         divContainer['setAttribute']('data-fbtype', 'profile');
                         divContainer['setAttribute']('data-fbname', document['getElementById']('fb-timeline-cover-name')['innerText'])
                     } catch (ex) {};
                     try {
-                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_profiletimeline';
+                        divContainer['className'] = 'container-extension fb_btn_profiletimeline';
                         // Thẻ html bao bọc trong chỗ thông tin cá nhân facebook
                         let profileInner = document['getElementById']('pagelet_timeline_profile_actions');
                         profileInner['appendChild'](divContainer)
@@ -179,14 +190,14 @@
                     try {
                         for (let index = 0; index < listButtonGroups['length']; index++) {
                             let buttonGroup = listButtonGroups[index];
-                            if (buttonGroup['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                            if (buttonGroup['getElementsByClassName']('container-extension')['length'] === 0) {
                                 let id = buttonGroup['getElementsByClassName']('FriendRequestOutgoing')[0]['getAttribute']('data-profileid') + '';
                                 let divContainer = createDevContainer(id);
                                 try {
                                     divContainer['setAttribute']('data-fbtype', 'profile')
                                 } catch (ex2) {};
                                 try {
-                                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userHoverCard';
+                                    divContainer['className'] = 'container-extension qcuidfb_btn_userHoverCard';
                                     buttonGroup['appendChild'](divContainer)
                                 } catch (ex) {}
                             }
@@ -198,7 +209,7 @@
                         try {
                             for (let index = 0; index < friendButtons['length']; index++) {
                                 let button = friendButtons[index];
-                                if (button['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                                if (button['getElementsByClassName']('container-extension')['length'] === 0) {
                                     let id = button['getAttribute']('ajaxify') + '';
                                     let regex = /=(\d+)/;
                                     id = regex['exec'](id)[1];
@@ -207,7 +218,7 @@
                                         divContainer['setAttribute']('data-fbtype', 'profile')
                                     } catch (ex2) {};
                                     try {
-                                        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userHoverCard';
+                                        divContainer['className'] = 'container-extension qcuidfb_btn_userHoverCard';
                                         button['parentNode']['appendChild'](divContainer)
                                     } catch (ex) {}
                                 }
@@ -217,21 +228,21 @@
                 }
             } catch (ex3) {};
 
-            // Nếu trong danh sách tìm kiếm bạn bè facebook
+            // Nếu trong danh sách tìm kiếm bạn bè facebook và trang gợi ý kết bạn
             try {
                 if (document['getElementsByClassName']('FriendButton')['length'] > 0) {
                     let friendButtons = document['getElementsByClassName']('FriendButton');
                     try {
                         for (let index = 0; index < friendButtons['length']; index++) {
                             let button = friendButtons[index];
-                            if (button['parentNode']['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                            if (button['parentNode']['getElementsByClassName']('container-extension')['length'] === 0) {
                                 let id = button['getElementsByClassName']('FriendRequestOutgoing')[0]['getAttribute']('data-profileid') + '';
                                 let divContainer = createDevContainer(id);
                                 try {
                                     divContainer['setAttribute']('data-fbtype', 'profile')
                                 } catch (ex2) {};
                                 try {
-                                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_likereaction';
+                                    divContainer['className'] = 'container-extension qcuidfb_btn_likereaction';
                                     button['appendChild'](divContainer)
                                 } catch (ex) {}
                             }
@@ -247,7 +258,7 @@
                     try {
                         for (let index = 0; index < likeButtons['length']; index++) {
                             let wrapItem = likeButtons[index];
-                            if (wrapItem['parentNode']['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                            if (wrapItem['parentNode']['getElementsByClassName']('container-extension')['length'] === 0) {
                                 let id = wrapItem['getAttribute']('data-profileid') + '';
                                 let divContainer = createDevContainer(id);
 
@@ -255,7 +266,7 @@
                                     divContainer['setAttribute']('data-fbtype', 'profile')
                                 } catch (ex2) {};
                                 try {
-                                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_likePagereaction';
+                                    divContainer['className'] = 'container-extension fb_btn_likePageReaction';
                                     wrapItem['parentNode'].style = "position: relative";
                                     wrapItem['parentNode']['appendChild'](divContainer)
                                 } catch (ex) {}
@@ -272,7 +283,7 @@
     }
 
     function createContainerButton(divContainer) {
-        divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_searchglobal';
+        divContainer['className'] = 'container-extension qcuidfb_btn_searchglobal';
         document['getElementsByTagName']('body')[0]['appendChild'](divContainer)
     }
 
@@ -284,15 +295,28 @@
         }
     } catch (exx) {};
 
-    function createDevContainer(userId) {
+    function createDevContainer(userId, facebookNam='') {
         let buttonInner = document['createElement']('div');
-        let iconInner = `<span class=\'qcuidfb_icon\' title=\'Thêm vào danh sách nguồn\'></span>`
-        buttonInner['className'] = 'qcuidfb_btn_search';
+        let iconInner = `<div class=\'qcuidfb_icon\' title=\'Thêm ${facebookNam} vào danh sách nguồn\'>
+            <svg class="icon" width="18" height="18" viewBox="0 0 18 18">
+              <g id="add-source" transform="translate(-1103 -111)">
+                <g id="border-icon" data-name="Ellipse 95" transform="translate(1103 111)" fill="#fff" stroke-width="1">
+                  <circle cx="9" cy="9" r="9" stroke="none"/>
+                  <circle cx="9" cy="9" r="8.5"/>
+                </g>
+                <g id="Layer_2" data-name="Layer 2" transform="translate(1103 111)">
+                  <g id="plus">
+                    <rect id="Rectangle_483" data-name="Rectangle 483" width="18" height="18" transform="translate(18 18) rotate(180)" opacity="0"/>
+                    <path id="Path_1307" data-name="Path 1307" d="M13.375,8.375H9.625V4.625a.625.625,0,0,0-1.25,0v3.75H4.625a.625.625,0,0,0,0,1.25h3.75v3.75a.625.625,0,0,0,1.25,0V9.625h3.75a.625.625,0,0,0,0-1.25Z"/>
+                  </g>
+                </g>
+              </g>
+            </svg>
+        </div>`
+        buttonInner['className'] = 'container-extension';
         buttonInner['setAttribute']('data-uid', userId);
         document['getElementsByTagName']('body')[0]['appendChild'](buttonInner);
-        buttonInner['innerHTML'] = iconInner +
-            '<img class=\'qcuidfb_img_loading\' src=\'https://quangcaouidfb.com/images/loading-blue.gif\'/>' +
-            '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
+        buttonInner['innerHTML'] = iconInner + '<span class=\'data_result\' ></span> <span class="icon-success"></span>';
 
         // Hàm này khi click vào icon trên màn hình sẽ được gọi tới và mình sẽ xử lỹ sự kiện trong hàm này.
         function handleClickButton() {
@@ -302,24 +326,16 @@
             let id = divContainer['getAttribute']('data-uid');
             // let facebookName = divContainer['getAttribute']('data-fbname');
             function createButtonLogin() {
-                let currentOriginUrl = location.origin;
-                const mappingCurrentUrl = {
-                    'https://www.facebook.com': 'facebook',
-                    'https://www.youtube.com': 'youtube'
-                }
-                // ẩn icon đi
                 divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
-                let notify = `<span> Bạn chưa đăng nhập vào SOCIALBOX </span> <br/>`;
-                let linkLogin = `<span> vui lòng click vào <a href="http://sbox.staging/login?ref=${mappingCurrentUrl[currentOriginUrl]}" target="_blank"> đây </a> để tiếp tục sử dụng sản phẩm </span>`
-                container['innerHTML'] = `${notify} ${linkLogin}`;
-                divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'block';
+                let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=facebook" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                container['innerHTML'] = notify;
+                divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)
             }
 
             function createIconSuccess() {
                 // ẩn icon đi
-                divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
                 divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('icon-success')[0];
                 let iconSuccess = `<img src="https://w0.pngwave.com/png/873/563/computer-icons-icon-design-business-success-png-clip-art-thumbnail.png"

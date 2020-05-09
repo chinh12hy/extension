@@ -1,52 +1,69 @@
-.qcuidfb_btn_search{ height: 24px;width: 24px;padding: 0;}
-.qcuidfb_btn_search .qcuidfb_icon {
+.container-extension{ height: 24px;width: 24px;padding: 0;}
+.container-extension .qcuidfb_icon {
     -webkit-transition: -webkit-box-shadow 0.2s ease-out;
     -moz-transition: -moz-box-shadow 0.2s ease-out;
     transition: box-shadow 0.2s ease-out;
-    background: url(https://quangcaouidfb.com/images/resized/logo.png?w=24) no-repeat;height: 24px;width: 24px;padding: 0;display: block;cursor: pointer;border-radius: 24px;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    /*background: url(https://quangcaouidfb.com/images/resized/logo.png?w=24) no-repeat;height: 24px;width: 24px;padding: 0;display: block;cursor: pointer;border-radius: 24px;*/
+    /*box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);*/
 }
-.qcuidfb_btn_search .qcuidfb_img_loading {
+.container-extension .qcuidfb_img_loading {
     display: none
 }
 
-.qcuidfb_btn_search.qcuidfb_loading .qcuidfb_icon{display: none}
-.qcuidfb_btn_search.qcuidfb_loading .qcuidfb_img_loading{ display: block;width: 24px;}
+.container-extension.qcuidfb_loading .qcuidfb_icon{display: none}
+.container-extension.qcuidfb_loading .qcuidfb_img_loading{ display: block;width: 24px;}
 
-.qcuidfb_btn_search .qcuidfb_icon:hover{box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.5);}
+.container-extension .qcuidfb_icon:hover .icon {
+    fill: #ff5630;
+}
+.container-extension .qcuidfb_icon:hover .icon #border-icon {
+    stroke: #0052cc;
+}
+.icon #border-icon {
+    stroke: #427eed;
+}
+.icon {
+    width: 24px;
+    height: 24px;
+}
 
-.qcuidfb_btn_pagechat{position: absolute;top: 15px;right: 585px;}
-.qcuidfb_btn_profiletimeline{position: absolute;bottom:3px;left: -22px;}
-.qcuidfb_btn_userContentWrapper{position: absolute;top: 9px;right: 25px;}
-.qcuidfb_btn_likePagereaction{position: absolute;top: 0;left: -35px;}
-.qcuidfb_btn_userContentWrapper .qcuidfb_icon{z-index: 9999; background: url(https://quangcaouidfb.com/images/resized/logo.png?w=20) no-repeat;height: 20px;width: 20px ;}
+/*#border-icon {*/
+/*}*/
+/*{box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.5);}*/
 
-.qcuidfb_btn_profilechat{position: absolute;top: 13px;left: -22px;}
-.qcuidfb_btn_userComment .qcuidfb_icon{float: right;background: url(https://quangcaouidfb.com/images/resized/logo.png?w=18) no-repeat;height: 18px;width: 18px ;}
-.qcuidfb_btn_userComment{position: absolute;
+.fb_btn_pagechat{position: absolute;top: 15px;right: 585px;}
+.fb_btn_profiletimeline{position: absolute;bottom:3px;left: -22px;}
+.fb_btn_userContentWrapper{position: absolute;top: 9px;right: 25px;}
+.fb_btn_likePageReaction{position: absolute;top: 0;left: -35px;}
+.fb_btn_userContentWrapper .qcuidfb_icon{z-index: 9999; background: url(https://quangcaouidfb.com/images/resized/logo.png?w=20) no-repeat;height: 20px;width: 20px ;}
+
+.fb_btn_profilechat{position: absolute;top: 13px;left: -22px;}
+.fb_btn_userComment .qcuidfb_icon{float: right;background: url(https://quangcaouidfb.com/images/resized/logo.png?w=18) no-repeat;height: 18px;width: 18px ;}
+.fb_btn_userComment{position: absolute;
     right: 10px;
     top: 0;
     display: none;
 }
-.UFICommentContentBlock:hover .qcuidfb_btn_userComment{
+.UFICommentContentBlock:hover .fb_btn_userComment{
     display: block;
 }
-.commentable_item111:hover .qcuidfb_btn_userComment{
+.commentable_item111:hover .fb_btn_userComment{
     display: block;
 }
-div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userComment{
+div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userComment{
     display: block;
 }
-div[data-testid="UFI2Comment/root_depth_1"]:hover .qcuidfb_btn_userComment{
+div[data-testid="UFI2Comment/root_depth_1"]:hover .fb_btn_userComment{
     display: block;
 }
-div[data-testid="UFI2Comment/root_depth_2"]:hover .qcuidfb_btn_userComment{
+div[data-testid="UFI2Comment/root_depth_2"]:hover .fb_btn_userComment{
     display: block;
 }
-div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
+div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
     display: block;
 }
-.qcuidfb_btn_userCommentInner {
+.fb_btn_userCommentInner {
     position: absolute;
     right: -25px;
     top: 3px;
@@ -69,14 +86,15 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
     font-size: 14px;
     font-weight: 700;
     width: 200px;
-    height: 200px;
     border: solid 1px gainsboro;
-    padding: 3px 5px;
+    padding: 10px;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 8px -2px;
     white-space: pre-line;
     border-radius: 1px;
     z-index: 9;
     text-align: left;
+    height: 100%;
+    align-items: center;
 }
 .content-error {
     right: -200px;
@@ -98,7 +116,7 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
     bottom: 8px;
     z-index: 9999;
 }
-.yt-video-owner {margin-left: 5px;}
+.yt-video-owner {margin-left: 5px; position: absolute;top: 25px; left: -35px}
 .yt-channel-owner .data_result {
     right: -120px;
 }
@@ -107,12 +125,29 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .qcuidfb_btn_userCommentInner{
     position: absolute;
     bottom: 15px;
     left: 5px;
+    z-index: 1000;
+}
+.yt-item-trending {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: -35px;
+}
+.yt-item-trending .data_result {
+    left: 0;
+}
+.yt-item-home .data_result {
+    right: -193px;
 }
 .yt-channel-owner {
     margin-left: 5px;
     position: absolute;
     top: 20px;
     left: -37px;
+}
+.yt-video-owner .data_result {
+    left: 0;
+    z-index: 1000;
 }
 .qcuidfb_btn_searchglobal .data_result{
     left: 0;

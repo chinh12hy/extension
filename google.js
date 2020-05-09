@@ -13,7 +13,7 @@
                         if (labelResult) {
                             let urlResult = labelResult.parentNode.getAttribute('href');
                             let divContainer = createDevContainer(urlResult);
-                            divContainer['className'] = 'qcuidfb_btn_search google-result-item';
+                            divContainer['className'] = 'container-extension google-result-item';
                             labelResult.parentNode.parentNode.appendChild(divContainer);
                         }
                     } else {
@@ -22,7 +22,7 @@
                             let urlResult = labelResult.parentNode.getAttribute('href');
                             let divContainer = createDevContainer(urlResult);
                             // labelResult.parentNode.style = "display: flex; align-items: center;";
-                            divContainer['className'] = 'qcuidfb_btn_search google-result-item';
+                            divContainer['className'] = 'container-extension google-result-item';
                             labelResult.parentNode.parentNode.appendChild(divContainer);
                         }
                     }
@@ -38,13 +38,26 @@
 
     function createDevContainer(url) {
         let buttonInner = document['createElement']('div');
-        let iconInner = `<span class=\'qcuidfb_icon\' title=\'Thêm ${url}'></span>`
-        buttonInner['className'] = 'qcuidfb_btn_search';
+        let iconInner = `<div class='qcuidfb_icon' title='Thêm ${url} vào danh sách nguồn'>
+            <svg class="icon" width="18" height="18" viewBox="0 0 18 18">
+              <g id="add-source" transform="translate(-1103 -111)">
+                <g id="border-icon" data-name="Ellipse 95" transform="translate(1103 111)" fill="#fff" stroke-width="1">
+                  <circle cx="9" cy="9" r="9" stroke="none"/>
+                  <circle cx="9" cy="9" r="8.5"/>
+                </g>
+                <g id="Layer_2" data-name="Layer 2" transform="translate(1103 111)">
+                  <g id="plus">
+                    <rect id="Rectangle_483" data-name="Rectangle 483" width="18" height="18" transform="translate(18 18) rotate(180)" opacity="0"/>
+                    <path id="Path_1307" data-name="Path 1307" d="M13.375,8.375H9.625V4.625a.625.625,0,0,0-1.25,0v3.75H4.625a.625.625,0,0,0,0,1.25h3.75v3.75a.625.625,0,0,0,1.25,0V9.625h3.75a.625.625,0,0,0,0-1.25Z"/>
+                  </g>
+                </g>
+              </g>
+            </svg>
+        </div>`
+        buttonInner['className'] = 'container-extension';
         buttonInner['setAttribute']('data-url', url);
         document['getElementsByTagName']('body')[0]['appendChild'](buttonInner);
-        buttonInner['innerHTML'] = iconInner +
-            '<img class=\'qcuidfb_img_loading\' src=\'https://quangcaouidfb.com/images/loading-blue.gif\'/>' +
-            '<span class=\'content-error\' ></span> <span class="icon-success"></span>';
+        buttonInner['innerHTML'] = iconInner + '<span class=\'content-error\' ></span> <span class="icon-success"></span>';
 
         // Hàm xử lý khi click icon của extension
         function handleClickButton() {
@@ -54,10 +67,9 @@
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('content-error')[0];
-                let notify = `<span> Bạn chưa đăng nhập vào SOCIALBOX </span> <br/>`;
-                let linkLogin = `<span> vui lòng click vào <a href="http://sbox.staging/login?ref=google" target="_blank"> đây </a> để tiếp tục sử dụng sản phẩm </span>`
-                container['innerHTML'] = `${notify} ${linkLogin}`;
-                divContainer['getElementsByClassName']('content-error')[0]['style']['display'] = 'block';
+                let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=google" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                container['innerHTML'] = notify;
+                divContainer['getElementsByClassName']('content-error')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)
             }
 
@@ -79,7 +91,7 @@
                     createButtonLogin();
                 }
                 // Xử lý khi gọi API thành công
-                if (response.target.status === 200) {
+                if (response.target.status === 200 || response.target.status === 201) {
                     createIconSuccess();
                 }
             });
@@ -93,7 +105,7 @@
                     let temp = {
                         url: linkResultItem
                     };
-                    Http['open']('POST', 'https://sbapi2.staging/api/waiting_sources/');
+                    Http['open']('POST', 'https://sbapi2.staging/api/url_sources/');
                     Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                     Http.setRequestHeader('authorization', `Bearer ${token}`);
                     Http['send'](JSON.stringify(temp));
