@@ -85,19 +85,20 @@
                                 let linkItem = link[index];
                                 // Tìm ra thằng nào có chứa id trong attrs
                                 if (linkItem['getAttribute']('data-hovercard') && !linkItem['getAttribute']('aria-hidden')) {
-                                    // LinkItem đến bước này vẫn lấy chính xác
-                                    let regex = /\?id=(\d+)/;
-                                    let dataHovercard = linkItem.getAttribute('data-hovercard');
-                                    // sau khi regex thì sẽ có sai sót làm thiếu linkItem ở đây
-                                    let id = regex['exec'](dataHovercard)[1];
+                                    // lọc điều kiện chỉ lấy những thằng là người comment không lấy mấy thằng được tag trong comment
+                                    if (linkItem.parentNode.className !== '_3l3x') {
+                                        // Kiểm tra xem thăng cha nó có button chưa nếu chưa có thì mới tiến hành tạo tránh tạo spam html
+                                        if (linkItem['parentNode']['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                                            let regex = /\?id=(\d+)/;
+                                            let dataHoverCard = linkItem.getAttribute('data-hovercard');
+                                            // sau khi regex thì sẽ có sai sót làm thiếu linkItem ở đây
+                                            let id = regex['exec'](dataHoverCard)[1];
+                                            let facebookName = linkItem.textContent;
+                                            let button = createDevContainer(id, facebookName);
 
-                                    //  linkItem.parentNode.childNodes.length === 3
-                                    // Kiểm tra xem thăng cha nó có button chưa nếu chưa có thì mới tiến hành tạo tránh tạo spam html
-                                    if (linkItem['parentNode']['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
-                                        let button = createDevContainer(id);
-
-                                        button['className'] = 'qcuidfb_btn_search qcuidfb_btn_userCommentInner';
-                                        linkItem['parentNode'].append(button);
+                                            button['className'] = 'qcuidfb_btn_search qcuidfb_btn_userCommentInner';
+                                            linkItem['parentNode'].append(button);
+                                        }
                                     }
                                 }
                             } catch (ex3) {}
@@ -121,7 +122,8 @@
                                 if (itemHasID['indexOf']('user.php') > -1 ) {
                                     let regex = /hovercard\/user\.php\?id=(\d+)/;
                                     let id = regex['exec'](itemHasID)[1];
-                                    let divContainer = createDevContainer(id);
+                                    let facebookName = tagA[index].getAttribute('title');
+                                    let divContainer = createDevContainer(id, facebookName);
                                     try {
                                         divContainer['setAttribute']('data-fbtype', 'post');
                                         divContainer['setAttribute']('data-fbname', tagA[index]['getAttribute']('title'))
@@ -136,7 +138,14 @@
                                 if (itemHasID['indexOf']('page.php') > -1 ) {
                                     let regex = /hovercard\/page\.php\?id=(\d+)/;
                                     let idPage = regex['exec'](itemHasID)[1];
-                                    let divContainer = createDevContainer(idPage);
+                                    let divContainer = null;
+                                    if (tagA[index].textContent) {
+                                        let pageName = tagA[index].textContent;
+                                        divContainer = createDevContainer(idPage, pageName);
+                                    } else {
+                                        let labelPageImage = tagA[index].getElementsByTagName('img')[0].getAttribute('aria-label');
+                                        divContainer = createDevContainer(idPage, labelPageImage);
+                                    }
                                     try {
                                         divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_userContentWrapper';
                                         item['appendChild'](divContainer)
@@ -152,10 +161,12 @@
             // Tạo button trong trang chi tiết trang cá nhân FB
             try {
                 // Tạo button trong trang chi tiết trang cá nhân FB
-                if (document['getElementById']('fbProfileCover') != null && document['getElementById']('pagelet_timeline_profile_actions')['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
+                if (document['getElementById']('fbProfileCover') != null
+                    && document['getElementById']('pagelet_timeline_profile_actions')['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
                     let dataFBUser = document['getElementById']('pagelet_timeline_main_column')['getAttribute']('data-gt');
                     let userID = JSON['parse'](dataFBUser)['profile_owner'];
-                    let divContainer = createDevContainer(userID);
+                    let facebookName = document.getElementById('fb-timeline-cover-name').textContent;
+                    let divContainer = createDevContainer(userID, facebookName);
                     try {
                         // comment
                         divContainer['setAttribute']('data-fbtype', 'profile');
@@ -217,7 +228,7 @@
                 }
             } catch (ex3) {};
 
-            // Nếu trong danh sách tìm kiếm bạn bè facebook
+            // Nếu trong danh sách tìm kiếm bạn bè facebook và trang gợi ý kết bạn
             try {
                 if (document['getElementsByClassName']('FriendButton')['length'] > 0) {
                     let friendButtons = document['getElementsByClassName']('FriendButton');
@@ -284,9 +295,9 @@
         }
     } catch (exx) {};
 
-    function createDevContainer(userId) {
+    function createDevContainer(userId, facebookNam='') {
         let buttonInner = document['createElement']('div');
-        let iconInner = `<span class=\'qcuidfb_icon\' title=\'Thêm vào danh sách nguồn\'></span>`
+        let iconInner = `<span class=\'qcuidfb_icon\' title=\'Thêm ${facebookNam} vào danh sách nguồn\'></span>`
         buttonInner['className'] = 'qcuidfb_btn_search';
         buttonInner['setAttribute']('data-uid', userId);
         document['getElementsByTagName']('body')[0]['appendChild'](buttonInner);

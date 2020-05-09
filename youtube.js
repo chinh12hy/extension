@@ -6,60 +6,7 @@
             listButton[index]['outerHTML'] = ''
         };
 
-        // Xử lý ở facebook
-        try {
-            let url = document['location']['href'];
-            if (url['indexOf']('/inbox/') > -1 && url['indexOf']('mailbox_id=') > -1) {
-                let regex = /selected_item_id=(\d+)/;
-                let id = regex['exec'](url)[1];
-                let divContainer = createDevContainer(id);
-                try {
-                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_pagechat';
-                    let isAppend = false;
-                    let listTable = document['getElementById']('globalContainer')['getElementsByClassName']('fb_content')[0]['getElementsByTagName']('table')[0]['getElementsByTagName']('div');
-                    for (let index = 0; index < listTable['length']; index++) {
-                        if (listTable[index]['getAttribute']('data-testid') === 'action_spam') {
-                            listTable[index]['parentNode']['appendChild'](divContainer);
-                            isAppend = true
-                        }
-                    };
-                    if (!isAppend) {
-                        document['getElementById']('globalContainer')['getElementsByClassName']('fb_content')[0]['getElementsByTagName']('table')[0]['getElementsByTagName']('td')[1]['appendChild'](divContainer);
-                        document['getElementById']('globalContainer')['getElementsByClassName']('fb_content')[0]['getElementsByTagName']('table')[0]['getElementsByTagName']('td')[2]['appendChild'](divContainer)
-                    }
-                } catch (ex) {
-                    createContainerButton(divContainer)
-                }
-            };
-            if (url['indexOf']('com/messages/t/') > -1) {
-                let regex = /messages\/t\/(\d+)/;
-                let _0xfea0x33 = '';
-                let _0xfea0x1b = regex['exec'](url);
-                if (_0xfea0x1b == null) {
-                    let listTagA = document['getElementsByTagName']('a');
-                    for (let index = 0; index < listTagA['length']; index++) {
-                        _0xfea0x33 = listTagA[index]['getAttribute']('uid');
-                        if (_0xfea0x33 !== null && _0xfea0x33 !== '') {
-                            break
-                        }
-                    }
-                } else {
-                    _0xfea0x33 = _0xfea0x1b[1]
-                };
-                let divContainer = createDevContainer(_0xfea0x33);
-                try {
-                    divContainer['className'] = 'qcuidfb_btn_search qcuidfb_btn_profilechat';
-                    let _0xfea0x38 = document['getElementsByClassName']('fb_content ')[0]['getElementsByTagName']('ul')[1];
-                    _0xfea0x38['appendChild'](divContainer)
-                } catch (ex) {
-                    createContainerButton(divContainer)
-                }
-            }
-        } catch (ex7) {};
-
         function handleCreateModuleExtension() {
-            // TODO YOUTUBE ---------------------------------------------------------------------------------------------------------------
-            // Xử lý ở youtube
             // Xử lý thêm button khi đang xem video youtube
             if (location.href.includes('https://www.youtube.com/watch')) {
                 try {
@@ -98,7 +45,6 @@
                     if (nameChannelYoutube['getElementsByClassName']('qcuidfb_btn_search')['length'] === 0) {
                         let idChanel = location.href.split('https://www.youtube.com')[1];
                         let divContainer = createDevContainer(idChanel);
-                        console.log('divContainer', divContainer);
                         nameChannelYoutube.style = "display: flex; align-items: center;";
                         divContainer['className'] = 'qcuidfb_btn_search yt-channel-detail';
                         nameChannelYoutube.appendChild(divContainer);
@@ -157,9 +103,6 @@
                     }
                 }
             }
-
-            // END youtube
-            // TODO YOUTUBE ---------------------------------------------------------------------------------------------------------------
             setTimeout(function() {
                 handleCreateModuleExtension()
             }, 2000)

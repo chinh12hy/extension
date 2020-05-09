@@ -1,6 +1,6 @@
 {
   "name": "Social box",
-  "description": "Tiện ích của social box1",
+  "description": "Tiện ích của social box",
   "version": "0.0.9",
   "permissions": [
     "cookies",
