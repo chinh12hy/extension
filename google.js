@@ -97,7 +97,6 @@
             });
             // Lấy localStorage trong extension ra để dùng cho API
             let token = '';
-            // comment
             // khi lấy được token thì tiến hành gọi api
             chrome.storage.sync.get(['token'], function(tokens) {
                 token = tokens.token;
