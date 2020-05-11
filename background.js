@@ -31,9 +31,6 @@ function getCookies(domain, name)
     // Lấy cookies
     chrome.cookies.get({"url": domain, "name": name}, function(cookie) {
         // Lưu cookie vừa lấy vào trong localStorage của extension
-        console.log('domain: ', domain);
-        console.log('name: ', name);
-        console.log('cookie: ', cookie);
         if (cookie) {
             chrome.storage.sync.set({'token': cookie.value}, function() {
                 console.log('đã lưu vào storage');
