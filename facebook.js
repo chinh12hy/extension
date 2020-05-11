@@ -140,7 +140,12 @@
                                         divContainer['setAttribute']('data-fbname', tagA[index]['getAttribute']('title'))
                                     } catch (ex) {};
                                     try {
-                                        divContainer['className'] = 'container-extension fb_btn_userContentWrapper';
+                                        // check nếu bảng tin có header là đã chia sẻ từ album thì thêm 1 class để sửa lại bị trí
+                                        if (item.getElementsByClassName('_1s31 i_axgck24rv f_axgck24r_').length > 0) {
+                                            divContainer['className'] = 'container-extension fb_btn_userContentWrapper fix-position-button';
+                                        } else {
+                                            divContainer['className'] = 'container-extension fb_btn_userContentWrapper';
+                                        }
                                         item['appendChild'](divContainer)
                                     } catch (ex) {};
                                     break
