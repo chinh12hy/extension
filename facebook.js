@@ -32,28 +32,38 @@
                     createContainerButton(divContainer)
                 }
             };
+            // Xử lý khi trong trang www.facebook.com/messages
             if (url['indexOf']('com/messages/t/') > -1) {
                 let regex = /messages\/t\/(\d+)/;
-                let _0xfea0x33 = '';
-                let _0xfea0x1b = regex['exec'](url);
-                if (_0xfea0x1b == null) {
+                let fbID = '';
+                let friendID = regex['exec'](url);
+                // Nếu url có dạng /usernamefb thì sẽ ra null
+                if (friendID == null) {
                     let listTagA = document['getElementsByTagName']('a');
                     for (let index = 0; index < listTagA['length']; index++) {
-                        _0xfea0x33 = listTagA[index]['getAttribute']('uid');
-                        if (_0xfea0x33 !== null && _0xfea0x33 !== '') {
+                        // lấy ra thằng nào có chứu id fb
+                        fbID = listTagA[index]['getAttribute']('uid');
+                        // tìm được rồi thì dừng lại
+                        if (fbID !== null && fbID !== '') {
                             break
                         }
                     }
                 } else {
-                    _0xfea0x33 = _0xfea0x1b[1]
+                    // còn nếu url dạng /facebookID thì sẽ bắt regex lấy ra id user
+                    fbID = friendID[1]
                 };
-                let divContainer = createDevContainer(_0xfea0x33);
-                try {
-                    divContainer['className'] = 'container-extension fb_btn_profilechat';
-                    let _0xfea0x38 = document['getElementsByClassName']('fb_content ')[0]['getElementsByTagName']('ul')[1];
-                    _0xfea0x38['appendChild'](divContainer)
-                } catch (ex) {
-                    createContainerButton(divContainer)
+                let facebookName = document.getElementById('js_5').textContent || '';
+                // chỉ thêm button khi không ở một nhóm chat nào đó
+                if (document.getElementById('js_5').getElementsByTagName('em').length === 0) {
+                    let divContainer = createDevContainer(fbID, facebookName);
+                    try {
+                        divContainer['className'] = 'container-extension fb_btn_profilechat';
+                        let containerExtension = document['getElementsByClassName']('fb_content ')[0]['getElementsByTagName']('ul')[1];
+                        containerExtension.style = "position: relative";
+                        containerExtension['appendChild'](divContainer)
+                    } catch (ex) {
+                        createContainerButton(divContainer)
+                    }
                 }
             }
         } catch (ex7) {};
@@ -329,7 +339,7 @@
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
-                let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=facebook" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=facebook" style="display: initial" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
                 container['innerHTML'] = notify;
                 divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)
