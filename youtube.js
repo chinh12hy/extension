@@ -1,5 +1,6 @@
 
 (function(e) {
+    const domainApi = 'https://sbapi2.staging';
     function createHtml() {
         let listButton = document['getElementsByClassName']('container-extension');
         for (let index = 0; index < listButton['length']; index++) {
@@ -247,7 +248,7 @@
                     }
                     // dùng https://sbapi2.staging để call api
                     // Chỉ nhận https
-                    Http['open']('POST', `https://sbapi2.staging/api/source_admin/?source_type=${mappingSourceType[currentOriginUrl]}`);
+                    Http['open']('POST', `${domainApi}/api/source_admin/?source_type=${mappingSourceType[currentOriginUrl]}`);
                     Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                     Http.setRequestHeader('authorization', `Bearer ${token}`);
                     Http['send'](JSON.stringify(temp));
