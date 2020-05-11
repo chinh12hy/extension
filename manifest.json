@@ -1,16 +1,12 @@
 {
   "name": "Social box",
   "description": "Tiện ích của social box",
-  "version": "0.0.9",
+  "version": "0.0.8",
   "permissions": [
     "cookies",
     "tabs",
     "storage",
-    "http://sbox.staging/*",
-    "https://sbox.staging/*",
     "activeTab",
-    "https://www.facebook.com/*" ,
-    "https://web.facebook.com/*,*://*/*",
     "http://*/",
     "https://*/"
   ],

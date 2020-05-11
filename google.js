@@ -1,4 +1,5 @@
 (function(e) {
+    const domainApi = 'https://sbapi2.staging';
     function createHtml() {
         function handleCreateModuleExtension() {
             // Xử lý trong trang search result của google
@@ -122,7 +123,7 @@
                     let temp = {
                         url: linkResultItem
                     };
-                    Http['open']('POST', 'https://sbapi2.staging/api/url_sources/');
+                    Http['open']('POST', `${domainApi}/api/url_sources/`);
                     Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                     Http.setRequestHeader('authorization', `Bearer ${token}`);
                     Http['send'](JSON.stringify(temp));

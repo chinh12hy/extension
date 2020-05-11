@@ -1,4 +1,5 @@
 (function(e) {
+    const domainApi = 'https://sbapi2.staging';
     function createHtml() {
         // Lấy danh sách các button
         let listButton = document['getElementsByClassName']('container-extension');
@@ -384,19 +385,12 @@
                         'https://www.youtube.com': 'youtube'
                     };
                     let currentOriginUrl = location.origin;
-                    let temp = [];
-                    if (location.href.includes('facebook')) {
-                        temp = [
-                            `${currentOriginUrl}/${id}`
-                        ];
-                    } else if (location.href.includes('youtube')) {
-                        temp = [
-                            `${currentOriginUrl}${id}`
-                        ];
-                    }
+                    let temp = [
+                        `${currentOriginUrl}/${id}`
+                    ];
                     // dùng https://sbapi2.staging để call api
                     // Chỉ nhận https
-                    Http['open']('POST', `https://sbapi2.staging/api/source_admin/?source_type=${mappingSourceType[currentOriginUrl]}`);
+                    Http['open']('POST', `${domainApi}/api/source_admin/?source_type=facebook`);
                     Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                     Http.setRequestHeader('authorization', `Bearer ${token}`);
                     Http['send'](JSON.stringify(temp));
