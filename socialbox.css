@@ -58,6 +58,10 @@
     width: 18px;
     height: 18px;
 }
+.fix-position-button {
+    top: 50px !important;
+    right: 0;
+}
 
 .fb_btn_profilechat{position: absolute;top: 13px;left: -22px;}
 .fb_btn_userComment .qcuidfb_icon{float: right;background: url(https://quangcaouidfb.com/images/resized/logo.png?w=18) no-repeat;height: 18px;width: 18px ;}
