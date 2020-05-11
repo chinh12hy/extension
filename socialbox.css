@@ -41,7 +41,23 @@
 .fb_btn_profiletimeline{position: absolute;bottom:3px;left: -22px;}
 .fb_btn_userContentWrapper{position: absolute;top: 9px;right: 25px;}
 .fb_btn_likePageReaction{position: absolute;top: 0;left: -35px;}
-.fb_btn_userContentWrapper .qcuidfb_icon{z-index: 9999; background: url(https://quangcaouidfb.com/images/resized/logo.png?w=20) no-repeat;height: 20px;width: 20px ;}
+.fb_btn_userContentWrapper .qcuidfb_icon{z-index: 9999;height: 20px;width: 20px ;}
+.fb_btn_userContentWrapper .icon {
+    width: 18px;
+    height: 18px;
+}
+.fb_btn_userContentWrapper .icon-success {
+    width: 18px;
+    height: 18px;
+}
+.fb_btn_userCommentInner .icon-success {
+    width: 18px;
+    height: 18px;
+}
+.fb_btn_userCommentInner .icon {
+    width: 18px;
+    height: 18px;
+}
 
 .fb_btn_profilechat{position: absolute;top: 13px;left: -22px;}
 .fb_btn_userComment .qcuidfb_icon{float: right;background: url(https://quangcaouidfb.com/images/resized/logo.png?w=18) no-repeat;height: 18px;width: 18px ;}
