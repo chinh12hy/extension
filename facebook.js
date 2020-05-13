@@ -76,11 +76,14 @@
                 try {
                     for (let index = 0; index < listGroup['length']; index++) {
                         let group = listGroup[index];
-                        if (group.childNodes.length === 1) {
+                        let wrapExtension = group.getElementsByClassName('_42ft _4jy0 _4jy3 _517h _51sy')[0];
+                        if (wrapExtension.parentNode.getElementsByClassName('container-extension').length === 0) {
                             let id = JSON.parse(group.getAttribute('data-bt')).id;
                             let divContainer = createDevContainer(id);
-                            divContainer['className'] = 'container-extension fb_btn_group';
-                            group.appendChild(divContainer)
+                            divContainer['className'] = 'container-extension fb_btn_group1';
+                            divContainer.style = "margin-right: 5px";
+                            wrapExtension.parentNode.style = "display: flex;flex-direction: row-reverse;align-items: center;"
+                            wrapExtension.parentNode.append(divContainer);
                         }
                     }
                 } catch (ex1) {}

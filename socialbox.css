@@ -80,8 +80,8 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
 
 .fb_btn_group {
     position: absolute;
-    top: 42px;
-    right: 15px;
+    top: 19px;
+    right: 120px;
 }
 .data_result,
 .content-error{
