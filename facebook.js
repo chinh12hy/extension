@@ -89,6 +89,66 @@
                 } catch (ex1) {}
             };
 
+            //Xử lý tìm kiếm tất cả
+            if (location.href.includes('facebook.com/search/top')) {
+                let listPostResult = document.getElementsByClassName('_5bl2 _401d');
+                for (let index =0; index < listPostResult.length; index++) {
+                    let postItem = listPostResult[index].parentNode;
+                    let dataHoverCard = postItem.getElementsByClassName('_7gyi')[0].getAttribute('data-hovercard');
+                    let namePageOrUser = postItem.getElementsByClassName('_7gyi')[0].textContent;
+                    if (postItem.getElementsByClassName('container-extension').length === 0) {
+                        if (dataHoverCard.includes('user.php')) {
+                            let regex = /hovercard\/user\.php\?id=(\d+)/;
+                            let userID = regex.exec(dataHoverCard)[1];
+                            let divContainer = createDevContainer(userID, namePageOrUser);
+                            divContainer.className = 'container-extension fb-search-post-all';
+                            postItem.append(divContainer);
+                        } else if (dataHoverCard.includes('page.php')) {
+                            let regex = /hovercard\/page\.php\?id=(\d+)/;
+                            let pageID = regex.exec(dataHoverCard)[1];
+                            let divContainer = createDevContainer(pageID, namePageOrUser);
+                            divContainer.className = 'container-extension fb-search-post-all';
+                            postItem.append(divContainer);
+                        }
+                    }
+                }
+                // Dùng để xử lý cho trường hợp là page trong tìm kiếm tất cả
+                let likeButtons = document.getElementsByClassName('PageLikeButton');
+                try {
+                    for (let index = 0; index < likeButtons['length']; index++) {
+                        let wrapItem = likeButtons[index];
+                        if (wrapItem['parentNode']['getElementsByClassName']('container-extension')['length'] === 0) {
+                            let id = wrapItem['getAttribute']('data-profileid') + '';
+                            let divContainer = createDevContainer(id);
+                            try {
+                                divContainer['className'] = 'container-extension';
+                                divContainer.style = "margin-right: 5px";
+                                wrapItem['parentNode'].className = "flex-row-reverse";
+                                wrapItem['parentNode']['appendChild'](divContainer)
+                            } catch (ex) {}
+                        }
+                    }
+                } catch (ex1) {}
+                // Dùng để xử lý cho trường hợp là group trong tìm kiếm tất cả
+                let iconJoinGroup = document.getElementsByClassName('_3-8_ img sp_umIS4fBE-OL sx_c0e109');
+                try {
+                    for (let index = 0; index < iconJoinGroup['length']; index++) {
+                        let regex = /\?group_id=(\d+)/;
+                        let wrapItem = iconJoinGroup[index].parentNode;
+                        let data = wrapItem.getAttribute('ajaxify');
+                        if (wrapItem['parentNode']['getElementsByClassName']('container-extension')['length'] === 0) {
+                            let groupID = regex.exec(data)[1];
+                            let divContainer = createDevContainer(groupID);
+                            try {
+                                divContainer['className'] = 'container-extension';
+                                divContainer.style = "margin-right: 5px";
+                                wrapItem['parentNode'].className = "flex-row-reverse";
+                                wrapItem['parentNode']['appendChild'](divContainer)
+                            } catch (ex) {}
+                        }
+                    }
+                } catch (ex1) {}
+            }
             // Trong trang chi tiết 1 group
             if (location.href.includes('facebook.com/groups')) {
                 let buttonJoinGroup = document['getElementsByClassName']('_42ft _4jy0 _21ku _4jy4 _4jy1 selected _51sy mrm')[0];
