@@ -78,6 +78,18 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
     z-index: 99;
 }
 
+.fb-search-post-all {
+    position: absolute;
+    top: 13px;
+    right: 5px;
+}
+
+.flex-row-reverse {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
 .fb_btn_group {
     position: absolute;
     top: 19px;
