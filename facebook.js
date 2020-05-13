@@ -163,7 +163,11 @@
                                         divContainer = createDevContainer(idPage, labelPageImage);
                                     }
                                     try {
-                                        divContainer['className'] = 'container-extension fb_btn_userContentWrapper';
+                                        if (item.getElementsByClassName('_1s31 i_axgck24rv f_axgck24r_').length > 0) {
+                                            divContainer['className'] = 'container-extension fb_btn_userContentWrapper fix-position-button';
+                                        } else {
+                                            divContainer['className'] = 'container-extension fb_btn_userContentWrapper';
+                                        }
                                         item['appendChild'](divContainer)
                                     } catch (ex) {};
                                     break
@@ -313,7 +317,7 @@
 
     function createDevContainer(userId, facebookNam='') {
         let buttonInner = document['createElement']('div');
-        let iconInner = `<div class=\'qcuidfb_icon\' title=\'Thêm ${facebookNam} vào danh sách nguồn\'>
+        let iconInner = `<div class=\'icon-add-source\' title=\'Thêm ${facebookNam} vào danh sách nguồn\'>
             <svg class="icon" width="18" height="18" viewBox="0 0 18 18">
               <g id="add-source" transform="translate(-1103 -111)">
                 <g id="border-icon" data-name="Ellipse 95" transform="translate(1103 111)" fill="#fff" stroke-width="1">
@@ -342,7 +346,7 @@
             let id = divContainer['getAttribute']('data-uid');
             // let facebookName = divContainer['getAttribute']('data-fbname');
             function createButtonLogin() {
-                divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
+                divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
                 let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=facebook" style="display: initial" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
                 container['innerHTML'] = notify;
@@ -352,7 +356,7 @@
 
             function createIconSuccess() {
                 // ẩn icon đi
-                divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
+                divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('icon-success')[0];
                 let iconSuccess = `<svg class="icon-success" width="18" height="18" viewBox="0 0 18 18">
                   <g id="add-source-tick" transform="translate(-1064 -172)">

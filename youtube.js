@@ -11,48 +11,57 @@
             // Xử lý thêm button khi đang xem video youtube
             if (location.href.includes('https://www.youtube.com/watch')) {
                 try {
-                    if (document.getElementsByClassName('yt-simple-endpoint')) {
-                        let wrapExtensionTag = document.getElementById('meta');
-                        let nameChanelYoutube = document.getElementsByClassName('ytd-video-owner-renderer')[3];
-                        let linkTag = nameChanelYoutube.getElementsByTagName('a')[0];
-                        let divWrapExtension = wrapExtensionTag.getElementsByClassName('container-extension')[0];
-                        let channelName = linkTag.textContent;
-                        if (divWrapExtension) {
-                            const currentHref = linkTag.getAttribute('href');
-                            const buttonHref = divWrapExtension.getAttribute('data-uid');
-                            // check link giữa channel và data trong button khác nhau thì sẽ tiến hành xóa cái button cũ đi tạo cái button mới với link của channel hiện tại
-                            if (currentHref !== buttonHref) {
-                                wrapExtensionTag.removeChild(divWrapExtension);
+                    if (document.getElementsByClassName('ytd-subscribe-button-renderer').length > 0) {
+                        if (document.getElementsByClassName('yt-simple-endpoint')) {
+                            // console.log('image: ', document.getElementsByTagName('yt-img-shadow'))
+                            let wrapExtensionTag = document.getElementById('meta');
+                            let nameChanelYoutube = document.getElementsByClassName('ytd-video-owner-renderer')[3];
+                            let linkTag = nameChanelYoutube.getElementsByTagName('a')[0];
+                            let divWrapExtension = wrapExtensionTag.getElementsByClassName('container-extension')[0];
+                            let channelName = linkTag.textContent;
+                            let wrapChannelNameTag = wrapExtensionTag.getElementsByTagName('yt-formatted-string')[0];
+                            document.getElementsByTagName('ytd-video-owner-renderer')[0].style = "position: relative";
+                            if (divWrapExtension) {
+                                const currentHref = linkTag.getAttribute('href');
+                                const buttonHref = divWrapExtension.getAttribute('data-uid');
+                                // check link giữa channel và data trong button khác nhau thì sẽ tiến hành xóa cái button cũ đi tạo cái button mới với link của channel hiện tại
+                                if (currentHref !== buttonHref) {
+                                    wrapChannelNameTag.parentNode.removeChild(divWrapExtension);
+                                    let idChanel = linkTag.getAttribute('href');
+                                    let divContainer = createDevContainer(idChanel, channelName);
+                                    wrapChannelNameTag.parentNode.style = "display: flex";
+                                    divContainer['className'] = 'container-extension yt-video-owner';
+                                    wrapChannelNameTag.parentNode.append(divContainer);
+                                }
+                            }
+                            if (linkTag && wrapExtensionTag['getElementsByClassName']('container-extension')['length'] === 0) {
                                 let idChanel = linkTag.getAttribute('href');
                                 let divContainer = createDevContainer(idChanel, channelName);
-                                wrapExtensionTag.style = "position: relative";
                                 divContainer['className'] = 'container-extension yt-video-owner';
-                                wrapExtensionTag.appendChild(divContainer);
+                                wrapChannelNameTag.parentNode.style = "display: flex";
+                                wrapChannelNameTag.parentNode.append(divContainer);
+                                    // document.getElementsByClassName('ytd-subscribe-button-renderer')[0].append(divContainer)
                             }
-                        }
-                        if (linkTag && wrapExtensionTag['getElementsByClassName']('container-extension')['length'] === 0) {
-                            let idChanel = linkTag.getAttribute('href');
-                            let divContainer = createDevContainer(idChanel, channelName);
-                            divContainer['className'] = 'container-extension yt-video-owner';
-                            wrapExtensionTag.style = "position: relative";
-                            wrapExtensionTag.appendChild(divContainer);
-                        }
-                    };
+                        };
+                    }
                 } catch (error) {};
             }
 
             // Xử lý khi đang trong home của 1 kênh youtube
             if (location.href.includes('https://www.youtube.com/channel')) {
                 // Xử lý cho chanel ở đây
-                if (document.getElementById('channel-name')) {
-                    let nameChannelYoutube = document.getElementById('channel-name');
-                    if (nameChannelYoutube['getElementsByClassName']('container-extension')['length'] === 0) {
-                        let channelName = nameChannelYoutube.getElementsByTagName('yt-formatted-string')[0].textContent || ''
-                        let idChanel = location.href.split('https://www.youtube.com')[1];
-                        let divContainer = createDevContainer(idChanel, channelName);
-                        nameChannelYoutube.style = "display: flex; align-items: center;";
-                        divContainer['className'] = 'container-extension yt-channel-detail';
-                        nameChannelYoutube.appendChild(divContainer);
+                let bannerChannel = document.getElementById('banner-editor');
+                if (bannerChannel) {
+                    if (document.getElementById('channel-name')) {
+                        let nameChannelYoutube = document.getElementById('channel-name');
+                        if (nameChannelYoutube['getElementsByClassName']('container-extension')['length'] === 0) {
+                            let channelName = nameChannelYoutube.getElementsByTagName('yt-formatted-string')[0].textContent || ''
+                            let idChanel = location.href.split('https://www.youtube.com')[1];
+                            let divContainer = createDevContainer(idChanel, channelName);
+                            nameChannelYoutube.style = "display: flex; align-items: center;";
+                            divContainer['className'] = 'container-extension yt-channel-detail';
+                            nameChannelYoutube.appendChild(divContainer);
+                        }
                     }
                 }
             }
@@ -148,7 +157,7 @@
 
     function createDevContainer(channelID, channelName = '') {
         let buttonInner = document['createElement']('div');
-        let iconInner = `<div class='qcuidfb_icon' title='Thêm ${channelName} vào danh sách nguồn'>
+        let iconInner = `<div class='icon-add-source' title='Thêm ${channelName} vào danh sách nguồn'>
             <svg class="icon" width="18" height="18" viewBox="0 0 18 18">
               <g id="add-source" transform="translate(-1103 -111)">
                 <g id="border-icon" data-name="Ellipse 95" transform="translate(1103 111)" fill="#fff" stroke-width="1">
@@ -177,7 +186,7 @@
             let id = divContainer['getAttribute']('data-uid');
             // let facebookName = divContainer['getAttribute']('data-fbname');
             function createButtonLogin() {
-                divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
+                divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
                 let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=youtube" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
                 container['innerHTML'] = notify;
@@ -187,8 +196,8 @@
 
             function createIconSuccess() {
                 // ẩn icon đi
-                divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
-                divContainer['getElementsByClassName']('qcuidfb_icon')[0]['style']['display'] = 'none';
+                divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
+                divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('icon-success')[0];
                 let iconSuccess = `<svg class="icon-success" width="18" height="18" viewBox="0 0 18 18">
                   <g id="add-source-tick" transform="translate(-1064 -172)">
