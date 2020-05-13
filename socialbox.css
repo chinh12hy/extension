@@ -37,7 +37,7 @@
 /*{box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.5);}*/
 
 .fb_btn_pagechat{position: absolute;top: 15px;right: 585px;}
-.fb_btn_profiletimeline{position: absolute;bottom:3px;left: -22px;}
+.fb_btn_profiletimeline{position: absolute;bottom:4px;left: -22px;}
 .fb_btn_userContentWrapper{position: absolute;top: 9px;right: 25px;}
 .fb_btn_likePageReaction{position: absolute;top: 0;left: -35px;}
 .fb_btn_userContentWrapper .icon-add-source{z-index: 9999;height: 20px;width: 20px ;}
