@@ -79,12 +79,44 @@
                         if (group.childNodes.length === 1) {
                             let id = JSON.parse(group.getAttribute('data-bt')).id;
                             let divContainer = createDevContainer(id);
-                            divContainer['className'] = 'container-extension qcuidfb_btn_group';
+                            divContainer['className'] = 'container-extension fb_btn_group';
                             group.appendChild(divContainer)
                         }
                     }
                 } catch (ex1) {}
             };
+
+            // Trong trang chi tiết 1 group
+            if (location.href.includes('facebook.com/groups')) {
+                let buttonJoinGroup = document['getElementsByClassName']('_42ft _4jy0 _21ku _4jy4 _4jy1 selected _51sy mrm')[0];
+                if (buttonJoinGroup && buttonJoinGroup.parentNode.getElementsByClassName('container-extension').length === 0 ) {
+                    let groupID = buttonJoinGroup.id.split('_')[1];
+                    const groupName = document.getElementById('seo_h1_tag').textContent || '';
+                    let divContainer = createDevContainer(groupID, groupName);
+                    divContainer.className = 'container-extension';
+                    divContainer.style = "margin-left: 5px"
+                    buttonJoinGroup.parentNode.style = "display: flex; align-items: center;position:relative";
+                    buttonJoinGroup.parentNode.parentNode.style = "display: flex; align-items: center";
+                    buttonJoinGroup.parentNode.appendChild(divContainer);
+                }
+            };
+
+            // Xử lý trong chi tiết 1 "Trang" trong facebook
+            if (document.getElementById('PagesCoverElementContainerPagelet')) {
+                if (document.getElementsByClassName('container-extension').length === 0) {
+                    let likeButtonPage  =  document.getElementsByClassName('likeButton')[0] || document.getElementsByClassName('likedButton')[0];
+                    let wrapImage = document.getElementsByClassName('_6tax')[0];
+                    if (!wrapImage) return;
+                    let idPage = wrapImage.getElementsByTagName('a')[0].getAttribute('href').split('/')[1]
+                        || document.getElementById('PagesCoverElementContainerPagelet').getElementsByTagName('a')[0].getAttribute('href').split('/')[1];
+                    const pageName = document.getElementById('seo_h1_tag').textContent || '';
+                    let divContainer = createDevContainer(idPage, pageName);
+                    divContainer.className = 'container-extension';
+                    divContainer.style = "margin-right: 5px";
+                    likeButtonPage.parentNode.style = "display: flex;align-items: center;flex-direction: row-reverse";
+                    likeButtonPage.parentNode.append(divContainer);
+                }
+            }
             // xử lý trong phần comment FB
             if (document['getElementsByClassName']('commentable_item')['length'] > 0) {
                 let commentsTable = document['getElementsByClassName']('commentable_item');

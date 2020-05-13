@@ -78,7 +78,7 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
     z-index: 99;
 }
 
-.qcuidfb_btn_group {
+.fb_btn_group {
     position: absolute;
     top: 42px;
     right: 15px;
