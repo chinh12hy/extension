@@ -48,21 +48,48 @@
             }
 
             // Xử lý khi đang trong home của 1 kênh youtube
-            if (location.href.includes('https://www.youtube.com/channel')) {
+            if (location.href.includes('https://www.youtube.com/channel') || location.href.includes('https://www.youtube.com/user')) {
                 // Xử lý cho chanel ở đây
                 let bannerChannel = document.getElementById('banner-editor');
-                if (bannerChannel) {
-                    if (document.getElementById('channel-name')) {
-                        let nameChannelYoutube = document.getElementById('channel-name');
-                        if (nameChannelYoutube['getElementsByClassName']('container-extension')['length'] === 0) {
-                            let channelName = nameChannelYoutube.getElementsByTagName('yt-formatted-string')[0].textContent || ''
-                            let idChanel = location.href.split('https://www.youtube.com')[1];
-                            let divContainer = createDevContainer(idChanel, channelName);
-                            nameChannelYoutube.style = "display: flex; align-items: center;";
-                            divContainer['className'] = 'container-extension yt-channel-detail';
-                            nameChannelYoutube.appendChild(divContainer);
+                let miniChannels = document.getElementsByTagName('ytd-mini-channel-renderer');
+                console.log('miniChannels: ', miniChannels);
+                // Nếu trang này có hiển thị các kênh liên quan trong youtube
+                if (document.getElementById('inner-header-container') && miniChannels.length > 0) {
+                    for(let index =0; index < miniChannels.length; index++) {
+                        let miniChannel = miniChannels[index];
+                        if (miniChannel.getElementsByClassName('container-extension').length === 0) {
+                            let tagLink = miniChannel.getElementsByTagName('a')[0];
+                            let miniChannelName = tagLink.getElementsByTagName('span')[0].textContent;
+                            let miniChannelID = tagLink.getAttribute('href');
+                            let divContainer = createDevContainer(miniChannelID, miniChannelName);
+                            tagLink.parentNode.style = "position: relative";
+                            divContainer['className'] = 'container-extension yt-mini-channel';
+                            tagLink.parentNode.append(divContainer);
                         }
                     }
+                }
+
+                if (bannerChannel && location.href.includes('https://www.youtube.com/channel')) {
+                    if (document.getElementById('channel-name')) {
+                        // console.log('paper-tab: ', document.getElementsByTagName('paper-tab'))
+                        let containerHeader = document.getElementById('inner-header-container');
+                        // let channelName = containerHeader.childNodes[0].getElementsByTagName('ytd-channel-name')[0].getElementsByTagName('yt-formatted-string')[0].textContent;
+                        if (containerHeader['getElementsByClassName']('container-extension')['length'] === 0) {
+                            let content = containerHeader.childNodes[0].getElementsByTagName('ytd-channel-name')[0];
+                            let idChanel = location.href.split('https://www.youtube.com')[1];
+                            let divContainer = createDevContainer(idChanel);
+                            content.style = "display:flex;align-items:center";
+                            divContainer['className'] = 'container-extension yt-channel-detail';
+                            content.appendChild(divContainer);
+                        }
+                    }
+                }
+            } else {
+                // Tiến hành xóa các channel được recoment vì khi sang trang khác thì cái html nó vẫn còn dẫn đến khi vào một trang khác có các recoment trang youtube khác
+                // thì cái đống ý lại hiển thị ra cái trang facebook từ trước dẫn đến bị sai chức năng button
+                let miniChannels = document.getElementsByTagName('ytd-mini-channel-renderer');
+                for (index = miniChannels.length - 1; index >= 0; index--) {
+                    miniChannels[index].parentNode.removeChild(miniChannels[index]);
                 }
             }
 
@@ -76,19 +103,21 @@
                             let itemResult = listItemResult[i];
                             if (itemResult['getElementsByClassName']('container-extension')['length'] === 0) {
                                 let tagLink = itemResult.getElementsByClassName('yt-simple-endpoint style-scope yt-formatted-string')[0];
-                                let channelName = tagLink.textContent || '';
-                                let channelID = tagLink.getAttribute('href');
-                                if (channelID.includes('channel')) {
-                                    let divContainer = createDevContainer(channelID, channelName);
-                                    itemResult.style = "position: relative";
-                                    divContainer['className'] = 'container-extension yt-channel-owner';
-                                    itemResult.appendChild(divContainer);
-                                } else {
-                                    // xử thêm 1 button xóa ản nó đi để tránh chạy for vô hạn thừa thãi nặng chương trình
-                                    let divContainer = createDevContainer(channelID);
-                                    divContainer['className'] = 'container-extension yt-channel-owner';
-                                    divContainer.style = "display: none";
-                                    itemResult.appendChild(divContainer);
+                                if (tagLink) {
+                                    let channelName = tagLink && tagLink.textContent || '';
+                                    let channelID = tagLink.getAttribute('href');
+                                    if (channelID.includes('channel')) {
+                                        let divContainer = createDevContainer(channelID, channelName);
+                                        itemResult.style = "position: relative";
+                                        divContainer['className'] = 'container-extension yt-channel-owner';
+                                        itemResult.appendChild(divContainer);
+                                    } else {
+                                        // xử thêm 1 button xóa ản nó đi để tránh chạy for vô hạn thừa thãi nặng chương trình
+                                        let divContainer = createDevContainer(channelID);
+                                        divContainer['className'] = 'container-extension yt-channel-owner';
+                                        divContainer.style = "display: none";
+                                        itemResult.appendChild(divContainer);
+                                    }
                                 }
                             }
                         }
