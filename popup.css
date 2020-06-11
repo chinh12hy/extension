@@ -4,9 +4,9 @@
 .popup-wrapper {
     margin: 0;
     overflow: hidden;
-    width: 348px;
+    width: 360px;
     min-height: 100%;
-    font-family: 'Roboto', sans-serif;
+    font-family: Inter,Helvetica,Arial,sans-serif;;
     font-size: 14px;
 }
 
@@ -16,10 +16,14 @@
 .header {
     height: 46px;
     color: #0052CC;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     display: flex;
     align-items: center;
+}
+
+.content{
+	padding: 10px 0;
 }
 
 a {
@@ -29,10 +33,11 @@ a {
 .wrap-btn-guide {
     margin: 10px 0;
     display: flex;
+	flex-direction: row;
     align-items: center;
 }
 .btn {
-    display: inline-block;
+    display: block;
     margin-bottom: 0;
     font-weight: 400;
     text-align: center;
@@ -59,8 +64,4 @@ a {
     color: #fff;
     background-color: #57a3f3;
     border-color: #57a3f3;
-}
-
-.footer {
-    font-weight: 700;
 }
