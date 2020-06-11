@@ -186,7 +186,7 @@
 
     function createDevContainer(channelID, channelName = '') {
         let buttonInner = document['createElement']('div');
-        let iconInner = `<div class='icon-add-source' title='Thêm ${channelName} vào danh sách nguồn'>
+        let iconInner = `<div class='icon-add-source' title='Thêm ${channelName} vào danh sách nguồn tin'>
             <svg class="icon" width="18" height="18" viewBox="0 0 18 18">
               <g id="add-source" transform="translate(-1103 -111)">
                 <g id="border-icon" data-name="Ellipse 95" transform="translate(1103 111)" fill="#fff" stroke-width="1">
@@ -217,7 +217,7 @@
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
-                let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=youtube" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=${location.href}" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
                 container['innerHTML'] = notify;
                 divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)
