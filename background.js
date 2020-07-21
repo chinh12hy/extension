@@ -1,5 +1,6 @@
 // FB url hoặc các link mình cần lấy thông tin
-const domainApi = 'http://sbox.staging/';
+// const domainApi = 'http://sbox.staging/';
+const domainApi = 'https://beta.sb.1data.vn/';
 function isFacebook(url) {
     let currentUrl = new URL(url)['host'];
     let isFacebook = currentUrl['indexOf']('facebook.com') > -1;

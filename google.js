@@ -1,5 +1,15 @@
 (function(e) {
     const domainApi = 'https://sbapi2.staging';
+
+    function replaceClass(dom, newClass) {
+        let newClassStr = ' ' + newClass;
+        dom['className'] = dom['className']['replace'](newClassStr, '');
+        dom['className'] = dom['className'] + newClassStr
+    }
+
+    function removeClass(dom, className) {
+        dom['className'] = dom['className']['replace'](className, '')
+    }
     function createHtml() {
         function handleCreateModuleExtension() {
             // Xử lý trong trang search result của google
@@ -63,12 +73,25 @@
         // Hàm xử lý khi click icon của extension
         function handleClickButton() {
             let divContainer = this;
+            replaceClass(divContainer, 'google-loading');
             let linkResultItem = divContainer['getAttribute']('data-url');
-            // let facebookName = divContainer['getAttribute']('data-fbname');
+            divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('content-error')[0];
                 let notify = `<span> Bạn chưa <a href="${domainApi}/login?ref=${location.href}" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                container['innerHTML'] = notify;
+                divContainer['getElementsByClassName']('content-error')[0]['style']['display'] = 'flex';
+                divContainer['removeEventListener']('click', divContainer)
+            }
+
+            function handleError(statusCode) {
+                divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
+                let container = divContainer['getElementsByClassName']('content-error')[0];
+                let notify = `<span> Xảy ra lỗi vui lòng thử lại sau. </span> <br/>`;
+                if (statusCode === 403) {
+                    notify = `<span> Bạn không có quyền thực hiện hành động này. </span> <br/>`;
+                }
                 container['innerHTML'] = notify;
                 divContainer['getElementsByClassName']('content-error')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)
@@ -101,39 +124,46 @@
                 container['innerHTML'] = `${iconSuccess}`;
                 divContainer['removeEventListener']('click', divContainer)
             }
-            let Http = new XMLHttpRequest();
-            // Khi gọi API hoàn tất ( thành công 200 hoặc 500, 404 ect)
-            Http.addEventListener("load", (response) => {
-                // Khi hết quyền truy cập vì k có token hoặc hết hạn thì tiến hành hiển thị ra thông báo lỗi
-                if (response.target.status === 401) {
-                    createButtonLogin();
-                }
-                // Xử lý khi gọi API thành công
-                if (response.target.status === 200 || response.target.status === 201) {
-                    createIconSuccess();
-                }
-            });
-            // Lấy localStorage trong extension ra để dùng cho API
-            let token = '';
-            // khi lấy được token thì tiến hành gọi api
-            chrome.storage.sync.get(['token'], function(tokens) {
-                token = tokens.token;
-                // check có token mới được gọi API
-                if (token) {
-                    let temp = {
-                        url: linkResultItem
-                    };
-                    Http['open']('POST', `${domainApi}/api/url_sources/`);
-                    Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-                    Http.setRequestHeader('authorization', `Bearer ${token}`);
-                    Http['send'](JSON.stringify(temp));
-                } else {
-                    // tạo ra button đăng nhập
-                    createButtonLogin();
-                    // Xử lý hiển thị ra 1 button đường link sang trang login
-                }
+            try {
+                let Http = new XMLHttpRequest();
+                // Khi gọi API hoàn tất ( thành công 200 hoặc 500, 404 ect)
+                Http.addEventListener("load", (response) => {
+                    removeClass(divContainer, 'google-loading');
+                    // Khi hết quyền truy cập vì k có token hoặc hết hạn thì tiến hành hiển thị ra thông báo lỗi
+                    if (response.target.status === 401) {
+                        createButtonLogin();
+                    } else if (response.target.status === 200 || response.target.status === 201) {
+                        createIconSuccess();
+                    } else {
+                        handleError(response.target.status);
+                    }
+                });
+                // Lấy localStorage trong extension ra để dùng cho API
+                let token = '';
+                // khi lấy được token thì tiến hành gọi api
+                chrome.storage.sync.get(['token'], function(tokens) {
+                    token = tokens.token;
+                    // check có token mới được gọi API
+                    if (token) {
+                        let temp = {
+                            url: linkResultItem
+                        };
+                        Http['open']('POST', `${domainApi}/api/url_sources/`);
+                        Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                        Http.setRequestHeader('authorization', `Bearer ${token}`);
+                        Http['send'](JSON.stringify(temp));
+                    } else {
+                        removeClass(divContainer, 'google-loading');
+                        // tạo ra button đăng nhập
+                        createButtonLogin();
+                        // Xử lý hiển thị ra 1 button đường link sang trang login
+                    }
 
-            });
+                });
+            } catch (e) {
+                removeClass(divContainer, 'google-loading');
+                handleError(500);
+            }
 
         }
         buttonInner['addEventListener']('click', handleClickButton);

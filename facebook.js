@@ -1,5 +1,15 @@
 (function(e) {
     const domainApi = 'https://sbapi2.staging';
+
+    function replaceClass(dom, newClass) {
+        let newClassStr = ' ' + newClass;
+        dom['className'] = dom['className']['replace'](newClassStr, '');
+        dom['className'] = dom['className'] + newClassStr
+    }
+
+    function removeClass(dom, className) {
+        dom['className'] = dom['className']['replace'](className, '')
+    }
     function createHtml() {
         // Lấy danh sách các button
         let listButton = document['getElementsByClassName']('container-extension');
@@ -436,13 +446,26 @@
         // Hàm này khi click vào icon trên màn hình sẽ được gọi tới và mình sẽ xử lỹ sự kiện trong hàm này.
         function handleClickButton() {
             let divContainer = this;
-            // thêm loading class
-            // replaceClass(divContainer, 'qcuidfb_loading');
+            divContainer.className += ' fb-loading';
+            // replaceClass(divContainer, 'fb_loading');
             let id = divContainer['getAttribute']('data-uid');
+            // divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
                 let notify = `<span> Bạn chưa <a href="${domainApi}/login?ref=${location.href}" style="display: initial" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                container['innerHTML'] = notify;
+                divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'flex';
+                divContainer['removeEventListener']('click', divContainer)
+            }
+
+            function handleError(statusCode) {
+                divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
+                let container = divContainer['getElementsByClassName']('data_result')[0];
+                let notify = `<span> Xảy ra lỗi vui lòng thử lại sau. </span> <br/>`;
+                if (statusCode === 403) {
+                    notify = `<span> Bạn không có quyền thực hiện hành động này. </span> <br/>`;
+                }
                 container['innerHTML'] = notify;
                 divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)
@@ -474,47 +497,55 @@
                 container['innerHTML'] = `${iconSuccess}`;
                 divContainer['removeEventListener']('click', divContainer)
             }
-            let Http = new XMLHttpRequest();
-            // Khi gọi API hoàn tất ( thành công 200 hoặc 500, 404 ect)
-            Http.addEventListener("load", (response) => {
-                // Khi hết quyền truy cập vì k có token hoặc hết hạn thì tiến hành hiển thị ra thông báo lỗi
-                if (response.target.status === 401) {
-                    createButtonLogin();
-                }
-                // Xử lý khi gọi API thành công
-                if (response.target.status === 200) {
-                    createIconSuccess();
-                }
-            });
-            // Lấy localStorage trong extension ra để dùng cho API
-            let token = '';
-            // khi lấy được token thì tiến hành gọi api
-            chrome.storage.sync.get(['token'], function(tokens) {
-                token = tokens.token;
-                // check có token mới được gọi API
-                if (token) {
-                    const mappingSourceType = {
-                        'https://www.facebook.com': 'facebook',
-                        'https://www.youtube.com': 'youtube'
-                    };
-                    let currentOriginUrl = location.origin;
-                    let temp = [
-                        `${currentOriginUrl}/${id}`
-                    ];
-                    // dùng https://sbapi2.staging để call api
-                    // Chỉ nhận https
-                    Http['open']('POST', `${domainApi}/api/source_admin/?source_type=facebook`);
-                    Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-                    Http.setRequestHeader('authorization', `Bearer ${token}`);
-                    Http['send'](JSON.stringify(temp));
-                } else {
-                    // tạo ra button đăng nhập
-                    createButtonLogin();
-                    // Xử lý hiển thị ra 1 button đường link sang trang login
-                }
+            try {
+                let Http = new XMLHttpRequest();
+                // Khi gọi API hoàn tất ( thành công 200 hoặc 500, 404 ect)
+                Http.addEventListener("load", (response) => {
+                    removeClass(divContainer, 'fb-loading');
+                    // Khi hết quyền truy cập vì k có token hoặc hết hạn thì tiến hành hiển thị ra thông báo lỗi
+                    if (response.target.status === 401) {
+                        createButtonLogin();
+                    } else if (response.target.status === 200) {
+                        createIconSuccess();
+                    } else {
+                        handleError(response.target.status);
+                    }
+                });
+                // Lấy localStorage trong extension ra để dùng cho API
+                let token = '';
+                // khi lấy được token thì tiến hành gọi api
+                setTimeout(() => {
+                    chrome.storage.sync.get(['token'], function(tokens) {
+                        token = tokens.token;
+                        // check có token mới được gọi API
+                        if (token) {
+                            const mappingSourceType = {
+                                'https://www.facebook.com': 'facebook',
+                                'https://www.youtube.com': 'youtube'
+                            };
+                            let currentOriginUrl = location.origin;
+                            let temp = [
+                                `${currentOriginUrl}/${id}`
+                            ];
+                            // dùng https://sbapi2.staging để call api
+                            // Chỉ nhận https
+                            Http['open']('POST', `${domainApi}/api/source_admin/?source_type=facebook`);
+                            Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                            Http.setRequestHeader('authorization', `Bearer ${token}`);
+                            Http['send'](JSON.stringify(temp));
+                        } else {
+                            removeClass(divContainer, 'fb-loading');
+                            // tạo ra button đăng nhập
+                            createButtonLogin();
+                            // Xử lý hiển thị ra 1 button đường link sang trang login
+                        }
 
-            });
-
+                    });
+                }, 500)
+            } catch (e) {
+                removeClass(divContainer, 'fb-loading');
+                handleError(500);
+            }
         }
         buttonInner['addEventListener']('click', handleClickButton);
         return buttonInner
