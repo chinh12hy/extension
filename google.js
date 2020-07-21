@@ -68,7 +68,7 @@
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('content-error')[0];
-                let notify = `<span> Bạn chưa <a href="http://sbox.staging/login?ref=${location.href}" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                let notify = `<span> Bạn chưa <a href="${domainApi}/login?ref=${location.href}" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
                 container['innerHTML'] = notify;
                 divContainer['getElementsByClassName']('content-error')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)
