@@ -1,5 +1,6 @@
 (function(e) {
-    const domainApi = 'https://sbapi2.staging';
+    const domainApi = 'https://beta.sbapi.1data.vn';
+    const domain = 'https://beta.sb.1data.vn';
 
     function replaceClass(dom, newClass) {
         let newClassStr = ' ' + newClass;
@@ -322,7 +323,7 @@
                                     divContainer['setAttribute']('data-fbtype', 'profile')
                                 } catch (ex2) {};
                                 try {
-                                    divContainer['className'] = 'container-extension qcuidfb_btn_userHoverCard';
+                                    divContainer['className'] = 'container-extension sb_btn_userHoverCard';
                                     buttonGroup['appendChild'](divContainer)
                                 } catch (ex) {}
                             }
@@ -343,7 +344,7 @@
                                         divContainer['setAttribute']('data-fbtype', 'profile')
                                     } catch (ex2) {};
                                     try {
-                                        divContainer['className'] = 'container-extension qcuidfb_btn_userHoverCard';
+                                        divContainer['className'] = 'container-extension sb_btn_userHoverCard';
                                         button['parentNode']['appendChild'](divContainer)
                                     } catch (ex) {}
                                 }
@@ -367,7 +368,7 @@
                                     divContainer['setAttribute']('data-fbtype', 'profile')
                                 } catch (ex2) {};
                                 try {
-                                    divContainer['className'] = 'container-extension qcuidfb_btn_likereaction';
+                                    divContainer['className'] = 'container-extension sb_btn_likereaction';
                                     button['appendChild'](divContainer)
                                 } catch (ex) {}
                             }
@@ -408,7 +409,7 @@
     }
 
     function createContainerButton(divContainer) {
-        divContainer['className'] = 'container-extension qcuidfb_btn_searchglobal';
+        divContainer['className'] = 'container-extension sb_btn_searchglobal';
         document['getElementsByTagName']('body')[0]['appendChild'](divContainer)
     }
 
@@ -453,7 +454,7 @@
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
-                let notify = `<span> Bạn chưa <a href="${domainApi}/login?ref=${location.href}" style="display: initial" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                let notify = `<span> Bạn chưa <a href="${domain}/login?ref=${location.href}" style="display: initial" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
                 container['innerHTML'] = notify;
                 divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)

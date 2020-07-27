@@ -1,6 +1,7 @@
 
 (function(e) {
     const domainApi = 'https://sbapi2.staging';
+    const domain = 'https://beta.sb.1data.vn';
 
     function replaceClass(dom, newClass) {
         let newClassStr = ' ' + newClass;
@@ -227,7 +228,7 @@
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
-                let notify = `<span> Bạn chưa <a href="${domainApi}/login?ref=${location.href}" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
+                let notify = `<span> Bạn chưa <a href="${domain}/login?ref=${location.href}" target="_blank">đăng nhập</a> vào SOCIALBOX </span> <br/>`;
                 container['innerHTML'] = notify;
                 divContainer['getElementsByClassName']('data_result')[0]['style']['display'] = 'flex';
                 divContainer['removeEventListener']('click', divContainer)

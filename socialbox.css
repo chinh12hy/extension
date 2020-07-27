@@ -163,7 +163,7 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
     }
 }
 
-.qcuidfb_btn_searchglobal {
+.sb_btn_searchglobal {
     position: fixed;
     left: 8px;
     bottom: 8px;
@@ -214,7 +214,7 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
     left: 0;
     z-index: 1000;
 }
-.qcuidfb_btn_searchglobal .data_result{
+.sb_btn_searchglobal .data_result{
     left: 0;
     position: relative;
     float: left;
@@ -227,49 +227,26 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
 }
 #pagelet_timeline_profile_actions{position: relative;}
 .hovercardButtonGroup {position: relative}
-.qcuidfb_btn_userHoverCard {position: absolute;
+.sb_btn_userHoverCard {position: absolute;
     top: 0;
     z-index: 999;
     left: -130px;}
 
-.qcuidfb_btn_pancakechat {
-    position: absolute;
-    left: -34px;
-    top: 8px;
-}
-.qcuidfb_result_close{
-    position: absolute;
-    right: 0px;
-    font-size: 11px;
-    color: #bdb8b8;
-    cursor: pointer;
-    top: 0px;
-    height: 11px!important;
-    width: 11px!important;
-    line-height: 10px!important;
-    padding-right: 0;
-    text-align: center;
-}
-.qcuidfb_result_close:hover{
-    background: gainsboro;
-    color: #303030;
-}
-
 .FriendButton{position:relative;}
 
-.qcuidfb_btn_likereaction {position: absolute;
+.sb_btn_likereaction {position: absolute;
     top: 0;
     left: -30px;}
 
-#reaction_profile_browser1	.qcuidfb_btn_likereaction .data_result,
-#reaction_profile_browser2	.qcuidfb_btn_likereaction .data_result,
-#reaction_profile_browser3	.qcuidfb_btn_likereaction .data_result,
-#reaction_profile_browser4	.qcuidfb_btn_likereaction .data_result,
-#reaction_profile_browser5	.qcuidfb_btn_likereaction .data_result,
-#reaction_profile_browser6	.qcuidfb_btn_likereaction .data_result,
-#reaction_profile_browser7	.qcuidfb_btn_likereaction .data_result,
-#reaction_profile_browser8	.qcuidfb_btn_likereaction .data_result,
-#reaction_profile_browser9	.qcuidfb_btn_likereaction .data_result
+#reaction_profile_browser1	.sb_btn_likereaction .data_result,
+#reaction_profile_browser2	.sb_btn_likereaction .data_result,
+#reaction_profile_browser3	.sb_btn_likereaction .data_result,
+#reaction_profile_browser4	.sb_btn_likereaction .data_result,
+#reaction_profile_browser5	.sb_btn_likereaction .data_result,
+#reaction_profile_browser6	.sb_btn_likereaction .data_result,
+#reaction_profile_browser7	.sb_btn_likereaction .data_result,
+#reaction_profile_browser8	.sb_btn_likereaction .data_result,
+#reaction_profile_browser9	.sb_btn_likereaction .data_result
 {right: -118px;    min-width: 100px;}
 
 .layout-error-token {
