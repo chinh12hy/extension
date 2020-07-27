@@ -1,5 +1,6 @@
 (function(e) {
     const domainApi = 'https://sbapi2.staging';
+    const domain = 'https://beta.sb.1data.vn';
 
     function replaceClass(dom, newClass) {
         let newClassStr = ' ' + newClass;
@@ -148,7 +149,7 @@
                         let temp = {
                             url: linkResultItem
                         };
-                        Http['open']('POST', `${domainApi}/api/url_sources/`);
+                        Http['open']('POST', `${domain}/api/url_sources/`);
                         Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                         Http.setRequestHeader('authorization', `Bearer ${token}`);
                         Http['send'](JSON.stringify(temp));
