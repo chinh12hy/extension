@@ -251,7 +251,7 @@
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('icon-success')[0];
-                let iconSuccess = `<a href="${domain}/sources/${sourceInfo.id}" class="icon-success" target="_blank" title="Click xem thông tin của nguồn tin ${sourceInfo.name}">
+                let iconSuccess = `<a href="${domain}/source-details/${sourceInfo.id}" class="icon-success" target="_blank" title="Click xem thông tin của nguồn tin ${sourceInfo.name}">
                     <svg width="18" height="19" viewBox="0 0 29.9 34.255">
                       <g id="Group_1118" data-name="Group 1118" transform="translate(-200.999 -156.193)">
                         <g id="Group_1970" data-name="Group 1970">
