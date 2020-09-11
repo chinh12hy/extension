@@ -1,18 +1,15 @@
-.container-extension{ height: 18px;width: 18px;padding: 0;}
+.container-extension{
+    height: 18px;
+    width: 18px;
+    padding: 0;
+    color: #1c1e21;
+}
 .container-extension .icon-add-source {
     -webkit-transition: -webkit-box-shadow 0.2s ease-out;
     -moz-transition: -moz-box-shadow 0.2s ease-out;
     transition: box-shadow 0.2s ease-out;
     cursor: pointer;
-    /*box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);*/
 }
-.container-extension .qcuidfb_img_loading {
-    display: none
-}
-
-/*.container-extension.qcuidfb_loading .icon-add-source{display: none}*/
-/*.container-extension.qcuidfb_loading .qcuidfb_img_loading{ display: block;width: 24px;}*/
-
 .container-extension .icon-add-source:hover .icon {
     fill: #ff5630;
 }
@@ -31,13 +28,28 @@
     width: 18px;
     height: 18px;
 }
+.icon-success a {
+    display: flex;
+}
 
-/*#border-icon {*/
-/*}*/
-/*{box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.5);}*/
+.fb_btn_page {
+    position: absolute;
+    top: 23px;
+    left: -20px;
+}
 
 .fb_btn_pagechat{position: absolute;top: 15px;right: 585px;}
-.fb_btn_profiletimeline{position: absolute;bottom:4px;left: -22px;}
+.fb_btn_profiletimeline{
+    position: absolute;
+    top: 11px;
+    left: -25px;
+}
+.fb_btn_page .icon-add-source {
+    display: flex;
+}
+.fb_btn_profiletimeline .icon-add-source {
+    display: flex;
+}
 .fb_btn_userContentWrapper{position: absolute;top: 9px;right: 25px;}
 .fb_btn_likePageReaction{position: absolute;top: 0;left: -35px;}
 .fb_btn_userContentWrapper .icon-add-source{z-index: 9999;height: 20px;width: 20px ;}
@@ -92,8 +104,11 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
 
 .fb_btn_group {
     position: absolute;
-    top: 19px;
-    right: 120px;
+    top: 8px;
+    left: -25px;
+}
+.fb_btn_group .icon-add-source {
+    display: flex;
 }
 .data_result,
 .content-error{
@@ -113,7 +128,6 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
     border-radius: 1px;
     z-index: 999;
     text-align: left;
-    /*height: 100%;*/
     align-items: center;
     height: 40px;
 }

@@ -224,7 +224,6 @@
             replaceClass(divContainer, 'youtube_loading');
             let id = divContainer['getAttribute']('data-uid');
             divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
-            // let facebookName = divContainer['getAttribute']('data-fbname');
             function createButtonLogin() {
                 divContainer['getElementsByClassName']('icon-add-source')[0]['style']['display'] = 'none';
                 let container = divContainer['getElementsByClassName']('data_result')[0];
