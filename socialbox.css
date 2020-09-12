@@ -33,16 +33,19 @@
 }
 
 .fb_btn_page {
-    position: absolute;
-    top: 23px;
-    left: -20px;
+    margin-left: 7px;
+    /*position: absolute;*/
+    /*top: 23px;*/
+    /*left: -20px;*/
 }
 
 .fb_btn_pagechat{position: absolute;top: 15px;right: 585px;}
 .fb_btn_profiletimeline{
-    position: absolute;
-    top: 11px;
-    left: -25px;
+    margin-left: 7px;
+    margin-top: 5px;
+    /*position: absolute;*/
+    /*top: 11px;*/
+    /*left: -25px;*/
 }
 .fb_btn_page .icon-add-source {
     display: flex;
@@ -103,9 +106,10 @@ div[data-testid="UFI2Comment/root_depth_0"]:hover .fb_btn_userCommentInner{
 }
 
 .fb_btn_group {
-    position: absolute;
-    top: 8px;
-    left: -25px;
+    margin-left: 7px;
+    /*position: absolute;*/
+    /*top: 8px;*/
+    /*left: -25px;*/
 }
 .fb_btn_group .icon-add-source {
     display: flex;
