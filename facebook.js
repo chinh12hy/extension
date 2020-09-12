@@ -350,16 +350,36 @@
           let pageID = null;
           let textPage = null;
           const regexGetNumber = /\D/g;
-          textPage = document.getElementById('facebook').textContent;
+          // textPage = document.getElementById('facebook').textContent;
+          textPage = document.documentElement.innerHTML;
           const indexSearch = textPage.search('"pageID');
           pageID = textPage.slice(indexSearch, indexSearch + 35).replace(regexGetNumber,'');
+          const buttonLikedPage = document.getElementsByClassName('oajrlxb2 oo1teu6h gcieejh5 bn081pho humdl8nn izx4hr6d rq0escxv nhd2j8a9 j83agx80 p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys tkv8g59h qt6c0cv9 fl8dtwsd i1ao9s8h esuyzwwr f1sip0of lzcic4wl l9j0dhe7 abiwlrkh p8dawk7l beltcj47 p86d2i9g aot14ch1 kzx2olss cbu4d94t taijpn5t ni8dbmo4 stjgntxs k4urcfbm tv7at329');
+          const buttonLikePage = document.getElementsByClassName('oajrlxb2 tdjehn4e gcieejh5 bn081pho humdl8nn izx4hr6d rq0escxv nhd2j8a9 j83agx80 p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys tkv8g59h qt6c0cv9 fl8dtwsd i1ao9s8h esuyzwwr f1sip0of lzcic4wl l9j0dhe7 abiwlrkh p8dawk7l beltcj47 p86d2i9g aot14ch1 kzx2olss cbu4d94t taijpn5t ni8dbmo4 stjgntxs k4urcfbm tv7at329');
           const tagTextName = document.getElementsByClassName('oi732d6d ik7dh3pa d2edcug0 hpfvmrgz qv66sw1b c1et5uql a8c37x1j irj2b8pg q9se6cdp m6dqt4wy h7mekvxk hnhda86s oo9gr5id hzawbc8m')[0];
-          if (pageID && tagTextName && tagTextName.getElementsByClassName('container-extension').length === 0) {
-            createButtonAddSource(
-              pageID,
-              'oi732d6d ik7dh3pa d2edcug0 hpfvmrgz qv66sw1b c1et5uql a8c37x1j irj2b8pg q9se6cdp m6dqt4wy h7mekvxk hnhda86s oo9gr5id hzawbc8m',
-              'fb_btn_page'
-            );
+          // TODO cần kiểm tra thêm điều kiện
+          // Điều kiện check xem có phải page hay không
+          if (buttonLikedPage.length > 0 || buttonLikePage.length > 0) {
+            const pathname = localStorage.getItem('pathname');
+            localStorage.removeItem('pathname');
+            if (pageID === '') {
+              localStorage.setItem('pathname', location.pathname);
+              location.reload();
+            } else {
+              if (pageID && tagTextName && tagTextName.getElementsByClassName('container-extension fb_btn_page').length === 0) {
+                if (!pathname) {
+                  localStorage.setItem('pathname', location.pathname);
+                  location.reload();
+                } else {
+                  localStorage.removeItem('pathname');
+                  createButtonAddSource(
+                    pageID,
+                    'oi732d6d ik7dh3pa d2edcug0 hpfvmrgz qv66sw1b c1et5uql a8c37x1j irj2b8pg q9se6cdp m6dqt4wy h7mekvxk hnhda86s oo9gr5id hzawbc8m',
+                    'fb_btn_page'
+                  );
+                }
+              }
+            }
           }
         }
       } catch (e) {}
